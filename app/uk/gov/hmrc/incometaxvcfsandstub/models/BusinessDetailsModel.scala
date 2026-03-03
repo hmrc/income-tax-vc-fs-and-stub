@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json.{Json, OFormat}
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
+case class BusinessDetailsModel(activeSoleTrader: Boolean,
+                                activeUkProperty: Boolean,
+                                activeForeignProperty: Boolean,
+                                ceasedBusiness: Boolean)
 
-  val appName: String = config.get[String]("appName")
-
+object BusinessDetailsModel {
+  implicit val formats: OFormat[BusinessDetailsModel] = Json.format[BusinessDetailsModel]
 }

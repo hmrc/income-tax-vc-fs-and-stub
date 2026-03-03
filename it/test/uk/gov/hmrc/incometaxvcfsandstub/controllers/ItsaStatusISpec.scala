@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import uk.gov.hmrc.incometaxvcfsandstub.helpers.ComponentSpecBase
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
 
-  val appName: String = config.get[String]("appName")
-
+// This is a dummy it/test as we have none atm
+class ItsaStatusISpec extends ComponentSpecBase {
+  "to do" when {
+    "one is always equals one" in {
+      "one" should equal ("one")
+    }
+  }
 }

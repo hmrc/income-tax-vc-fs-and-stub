@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
-
-  val appName: String = config.get[String]("appName")
-
-}
+case class CalcSummary(calculationId:            String,
+                       calculationTimestamp:     String,
+                       calculationType:          String,
+                       requestedBy:              String,
+                       fromDate:                 String,
+                       toDate:                   String
+                      )

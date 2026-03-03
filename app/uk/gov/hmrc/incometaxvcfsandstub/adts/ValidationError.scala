@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.adts
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+sealed trait ValidationError
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
+case class YamlParsingFailure(message: String) extends ValidationError
 
-  val appName: String = config.get[String]("appName")
+case class SchemaParseFailure(message: String) extends ValidationError
 
-}
+case class PayLoadParseFailure(message: String) extends ValidationError
+
+case class ValidationFailure(message: String) extends ValidationError

@@ -1,0 +1,460 @@
+[info] welcome to sbt 1.10.10 (Eclipse Adoptium Java 11.0.19)
+[info] loading global plugins from /Users/aashiqjenner/.sbt/1.0/plugins
+[info] loading settings for project income-tax-vc-fs-and-stub-build from plugins.sbt...
+[info] loading project definition from /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/project
+[info] SbtAutoBuildPlugin - adding projectSettings
+[info] loading settings for project income-tax-vc-fs-and-stub from build.sbt...
+[info] SbtAutoBuildPlugin - adding projectSettings
+[info] SbtAutoBuildPlugin - adding global settings
+[info] SbtAutoBuildPlugin - repository is marked public. Licence headers will be added to all source files
+[error] fatal: No tags can describe '528dad0962d4518fbadc9bc20bfed0fc111f7842'.
+[error] fatal: No tags can describe '528dad0962d4518fbadc9bc20bfed0fc111f7842'.
+[error] Try --always, or create some tags.
+[error] Try --always, or create some tags.
+[info] SbtAutoBuildPlugin - repository is marked public. Licence headers will be added to all source files
+[info]   __              __
+[info]   \ \     ____   / /____ _ __  __
+[info]    \ \   / __ \ / // __ `// / / /
+[info]    / /  / /_/ // // /_/ // /_/ /
+[info]   /_/  / .___//_/ \__,_/ \__, /
+[info]       /_/               /____/
+[info] 
+[info] Version 3.0.7 running Java 11.0.19
+[info] 
+[info] Play is run entirely by the community. Please consider contributing and/or donating:
+[info] https://www.playframework.com/sponsors
+[info] 
+[info] Executing in batch mode. For better performance use sbt's shell
+[success] Total time: 0 s, completed 3 Mar 2026, 22:56:56
+[info] compiling 51 Scala sources and 1 Java source to /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes ...
+[info] done compiling
+[success] Total time: 5 s, completed 3 Mar 2026, 22:57:01
+[info] compiling 19 Scala sources to /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/test-classes ...
+[warn] /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/test/uk/gov/hmrc/incometaxvcfsandstub/mocks/MockDataRepository.scala:28:52: Unused import
+[warn] import scala.concurrent.ExecutionContext.Implicits.global
+[warn]                                                    ^
+[warn] /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/test/uk/gov/hmrc/incometaxvcfsandstub/mocks/MockDataRepository.scala:41:75: parameter ec in method mockAddEntry is never used
+[warn]   def mockAddEntry(document: DataModel)(response: UpdateResult) (implicit ec: ExecutionContext): OngoingStubbing[Future[UpdateResult]] = {
+[warn]                                                                           ^
+[warn] two warnings found
+[info] done compiling
+22:57:03,677 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.5.22
+22:57:03,677 |-INFO in ch.qos.logback.classic.util.ContextInitializer@63acb137 - No custom configurators were discovered as a service.
+22:57:03,677 |-INFO in ch.qos.logback.classic.util.ContextInitializer@63acb137 - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:57:03,678 |-INFO in ch.qos.logback.classic.util.ContextInitializer@63acb137 - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:57:03,679 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+22:57:03,683 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml]
+22:57:03,718 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - Main configuration file URL: file:/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml
+22:57:03,718 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - FileWatchList= {/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml}
+22:57:03,718 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - URLWatchList= {}
+22:57:03,720 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [FILE]
+22:57:03,720 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+22:57:03,731 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [logs/income-tax-view-change-dynamic-stub.log]
+22:57:03,732 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+22:57:03,732 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+22:57:03,732 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - NOTE: Writing to the console can be slow. Try to avoid logging to the 
+22:57:03,732 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - console in production environments, especially in high volume systems.
+22:57:03,732 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also https://logback.qos.ch/codes.html#slowConsole
+22:57:03,733 |-WARN in ch.qos.logback.core.model.processor.AppenderModelHandler - Appender named [CONNECTOR_LOG_FILE] not referenced. Skipping further processing.
+22:57:03,734 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.google.inject] to INFO
+22:57:03,734 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [uk.gov] to WARN
+22:57:03,734 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [application] to WARN
+22:57:03,734 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.asynchttpclient.netty.channel.DefaultChannelPool] to WARN
+22:57:03,734 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [connector] to TRACE
+22:57:03,734 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[connector]
+22:57:03,735 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to WARN
+22:57:03,735 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [FILE] to Logger[ROOT]
+22:57:03,735 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+22:57:03,735 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@2c899808 - End of configuration.
+22:57:03,735 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@3ea3cfcb - Registering current configuration as safe fallback point
+22:57:03,736 |-INFO in ch.qos.logback.classic.util.ContextInitializer@63acb137 - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 57 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-03-03 22:57:03,990 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:04,397 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:04,410 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:04,416 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:04,450 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+[info] CalculationUtilsSpec:
+[info] call getCalculationListSuccessResponse
+[info] - should create calcResponse model: AA888888A
+[info] - should be always single element
+[info] - should fail for nino in wrong format
+[info] - should getTaxYearRangeEndYear
+[info] call createCalSummaryModel
+[info] - should create calcResponse model: AA888888A
+[info] - should be always single element
+[info] - should fail for nino in wrong format
+[info] - should getTaxYearRangeEndYear
+2026-03-03 22:57:04,703 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:04,705 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55123] 
+2026-03-03 22:57:04,708 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55123] 
+2026-03-03 22:57:04,715 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:04,759 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:04,797 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:04,801 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:04,802 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:04,806 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+[info] RequestHandlerControllerSpec:
+[info] The getRequestHandler method
+[info] - should return the status code specified in the model
+[info] - should return the status and body
+[info] - should return a 404 status when the endpoint cannot be found
+[info] The postRequestHandler method
+[info] - should return the corresponding response of an incoming POST request
+[info] - should return a response status when there is no stubbed response body for an incoming POST request
+[info] - should return a 400 status if the request body doesn't validate against the stub
+[info] - should return a 404 status if the endpoint specified in the POST request can't be found
+2026-03-03 22:57:05,148 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:05,148 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55127] 
+2026-03-03 22:57:05,149 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55127] 
+2026-03-03 22:57:05,151 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:05,172 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:05,181 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:05,212 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:05,216 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:05,217 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:05,221 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+[info] SetupDataControllerSpec:
+[info] SetupDataController.addData
+[info]   when validateUrlMatch returns 'true'
+[info]     should when validateResponseJson returns 'true'
+[info]     - should return Status OK (200) if data successfully added to stub
+2026-03-03 22:57:05,259 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-78] rid=[] user=[] message=[[SetupDataController][addStubDataToDB] Failed to add data to Stub::DataModel(1234,2345,GET,200,Some({}))] 
+[info]     - should return Status InternalServerError (500) if unable to add data to the stub
+2026-03-03 22:57:05,261 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateResponseJson failed1234] 
+[info]   - should return Status BadRequest (400) when validateResponseJson returns 'false'
+[info]   - should return Status when validateResponseJson returns 'false'
+[info]   - should return Status InternalServerError (500) when validateResponseJson returns 'false'
+[info]   when validateUrlMatch returns 'false'
+2026-03-03 22:57:05,276 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateUrlMatch failed1234] 
+[info]   - should return Status BadRequest (400)
+[info]   when not a GET request
+[info]   - should return Status BadRequest (400)
+[info] SetupDataController.removeData
+[info] - should return Status OK (200) on successful removal of data from the stub
+[info] - should return Status InternalServerError (500) on unsuccessful removal of data from the stub
+[info] SetupDataController.removeAllData
+[info] - should return Status OK (200) on successful removal of all stubbed data
+[info] - should return Status InternalServerError (500) on successful removal of all stubbed data
+2026-03-03 22:57:05,281 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:05,281 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55131] 
+2026-03-03 22:57:05,281 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55131] 
+2026-03-03 22:57:05,292 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:05,306 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:05,312 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:05,340 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:05,344 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-9] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:05,345 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:05,348 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+[info] JsonYamlSchemaValidatorSpec:
+[info] .yamlToJson()
+[info]   when Custom sample yaml
+[info]   - should convert valid yaml from file to json
+[info]   when API-1566
+[info]   - should convert valid yaml api spec from file to correct json schema
+[info]   when API-1878
+[info]   - should convert valid yaml api spec from file to correct json schema
+[info]   when some input formats with errors
+[info]   - should return a Left YamlParsingFailure when given an empty string
+[info]   - should return a Left YamlParsingFailure when given an invalid yaml string
+[info]   - should return a Left YamlParsingFailure when given malformed yaml
+[info] .validateJson()
+[info]   when API-1878
+Warning: Nashorn engine is planned to be removed from a future JDK release
+2026-03-03 22:57:05,704 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation was successful.] 
+[info]   - should return true when validating a valid json payload against the correct json schema
+2026-03-03 22:57:05,707 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left ValidationFailure when validating a invalid json payload against the desired json schema
+2026-03-03 22:57:05,708 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left ValidationFailure when validating a empty json payload against the desired json schema
+[info]   - should return Left PayLoadParseFailure when validating a empty string against the desired json schema
+[info]   when API-1566
+2026-03-03 22:57:05,710 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation was successful.] 
+[info]   - should return true when validating a valid json payload against the correct json schema
+2026-03-03 22:57:05,711 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left ValidationFailure when validating a invalid json payload against the desired json schema
+2026-03-03 22:57:05,711 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left ValidationFailure when validating a empty json payload against the desired json schema
+[info]   - should return Left PayLoadParseFailure when validating a empty string against the desired json schema
+[info] .validateJsonAgainstYamlSchema()
+[info]   when API-1878
+2026-03-03 22:57:05,715 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation was successful.] 
+[info]   - should return Right(ReportSuccess) when validating a valid json payload against the correct yaml schema
+2026-03-03 22:57:05,719 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance value ("123456") not found in enum (possible values: ["No Status","MTD Mandated","MTD Voluntary","Annual","Non Digital","Dormant","MTD Exempt"]), string "ABC" is invalid against requested date format(s) [yyyy-MM-dd'T'HH:mm:ssZ, yyyy-MM-dd'T'HH:mm:ss.[0-9]{1,12}Z]] 
+[info]   - should return Left ValidationFailure when json contains multiple invalid data values for date and status field
+[info]   - should return Left YamlParsingFailure when yaml schema is an empty string
+[info]   - should return Left PayLoadParseFailure when jsonData is an empty string
+2026-03-03 22:57:05,724 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left PayLoadParseFailure when jsonData is empty - {} (object) and not an array
+[info]   when API-1566
+2026-03-03 22:57:05,725 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation was successful.] 
+[info]   - should return Right(ReportSuccess) when validating a valid json payload against the correct yaml schema
+2026-03-03 22:57:05,726 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (integer) does not match any allowed primitive type (allowed: ["string"]), instance type (string) does not match any allowed primitive type (allowed: ["object"])] 
+[info]   - should return Left ValidationFailure with error message when json contains multiple invalid data values
+[info]   - should return Left YamlParsingFailure when yaml schema is an empty string
+[info]   - should return Left PayLoadParseFailure when jsonData is an empty string
+2026-03-03 22:57:05,728 level=[WARN] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-JsonYamlSchemaValidatorSpec] rid=[] user=[] message=[[JsonYamlConverter][validateJson] JSON validation failed: instance type (object) does not match any allowed primitive type (allowed: ["array"])] 
+[info]   - should return Left PayLoadParseFailure when jsonData is empty - {}
+2026-03-03 22:57:05,728 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:05,728 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55135] 
+2026-03-03 22:57:05,729 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55135] 
+2026-03-03 22:57:05,731 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:05,747 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:05,753 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:05,777 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:05,780 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:05,783 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:05,784 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+[info] SetupSchemaControllerSpec:
+[info] The SetupSchemaController
+[info]   when a request to add a valid schema is successful
+[info]   - should Return a status 200 (OK)
+[info]   - should Result Body 'Successfully added Schema: {"_id":"test","url":"/test","method":"GET","responseSchema":{}}'
+[info]   when a request to add a valid schema is unsuccessful
+2026-03-03 22:57:05,805 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupSchemaControllerSpec$TestSetupSchemaController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupSchemaController][addSchema] could not store dataSchemaModel(test,/test,GET,{},None)] 
+[info]   - should Return a status 500 (ISE)
+[info]   - should Result Body 'Could not store data'
+[info]   when removing a schema is successful
+[info]   - should Return a status 200 (OK)
+[info]   when removing a schema is unsuccessful
+[info]   - should Return a status 500 (ISE)
+[info]   when removing all schemas is successful
+[info]   - should Return a status 200 (OK)
+[info]   when removing all schemas is unsuccessful
+[info]   - should Return a status 500 (ISE)
+2026-03-03 22:57:05,808 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:05,808 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55139] 
+2026-03-03 22:57:05,808 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55139] 
+2026-03-03 22:57:05,810 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+[info] ITSAStatusUrlParserSpec:
+[info] - An empty string return None
+[info] - return correct tax year / case A: 23-24
+[info] - return correct tax year / case B: 20-21
+[info] - return correct tax year / case C: 23-24
+2026-03-03 22:57:05,834 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:05,839 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:05,863 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:05,867 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:05,870 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:05,871 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+[info] EnrolmentStoreProxyControllerSpec:
+[info] getUTRList
+2026-03-03 22:57:05,888 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-EnrolmentStoreProxyControllerSpec] rid=[] user=[] message=[[33m agent groupid found: testGroupId[37m] 
+2026-03-03 22:57:05,888 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-EnrolmentStoreProxyControllerSpec] rid=[] user=[] message=[[33m responseJson: {"startRecord":1,"enrolments":[{"service":"HMRC-MTD-IT","friendlyName":"Clever+Digs+Set+2","state":"Activated","identifiers":[{"key":"MTDITID","value":"XAIT00000111111"}],"enrolmentDate":"2024-07-04T14:15:15.078","activationDate":"2024-07-04T14:15:15.078"},{"service":"HMRC-MTD-IT","friendlyName":"Damsels+In+This+Dress","state":"Activated","identifiers":[{"key":"MTDITID","value":"XDIT22222222222"}],"enrolmentDate":"2024-07-04T14:21:08.203","activationDate":"2024-07-04T14:21:08.203"},{"service":"HMRC-MTD-IT","friendlyName":"Clever+Digs+Set+5","state":"Activated","identifiers":[{"key":"MTDITID","value":"XYIT77777777777"}],"enrolmentDate":"2024-07-04T14:22:25.981","activationDate":"2024-07-04T14:22:25.981"},{"service":"HMRC-MTD-IT","friendlyName":"Clever+Digs+Set+6","state":"Activated","identifiers":[{"key":"MTDITID","value":"XBIT00994530029"}],"enrolmentDate":"2024-07-04T14:23:44.674","activationDate":"2024-07-04T14:23:44.674"}]}[37m] 
+[info] - should return status OK with the expected JSON response
+2026-03-03 22:57:05,889 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-EnrolmentStoreProxyControllerSpec] rid=[] user=[] message=[[33m agent groupid found: [37m] 
+[info] - should return status InternalServerError when an invalid groupId is provided
+2026-03-03 22:57:05,889 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:05,890 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-8] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55143] 
+2026-03-03 22:57:05,890 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55143] 
+2026-03-03 22:57:05,892 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:05,911 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:05,923 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:05,953 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-9] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:05,957 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:05,958 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:05,960 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+[info] BusinessDetailsRequestControllerSpec:
+[info] overwriteBusinessData
+[info]   should return status OK
+[info]   - when overwriting business data for a given MTD ID
+[info]   should return status Bad Request
+[info]   - when given invalid JSON data
+[info]   - when not given JSON data
+2026-03-03 22:57:06,055 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:06,055 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55147] 
+2026-03-03 22:57:06,056 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-5] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55147] 
+2026-03-03 22:57:06,059 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-5] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:06,077 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:06,082 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:06,113 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:06,116 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:06,121 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:06,121 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+[info] SchemaValidationSpec:
+[info] .loadResponseSchema()
+[info]   should with a matching schema in mongo
+[info]   - should return a json schema
+[info]   should without a matching schema in mongo
+[info]   - should throw an exception
+[info] .validateResponseJson()
+[info]   should with a valid json body
+[info]   - should return true
+[info]   should with an invalid json body
+2026-03-03 22:57:06,143 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.utils.SchemaValidation] thread=[scala-execution-context-global-79] rid=[] user=[] message=[error : error: object has missing required properties (["lastName"])
+    level: "error"
+    schema: {"loadingURI":"#","pointer":""}
+    instance: {"pointer":""}
+    domain: "validation"
+    keyword: "required"
+    required: ["firstName","lastName"]
+    missing: ["lastName"]
+] 
+[info]   - should return false
+[info] .loadUrlRegex()
+[info] - should return the url of the SchemaModel
+[info] .validateUrlMatch()
+[info] - should return 'true' if the urls match
+[info] .loadRequestSchema()
+[info]   should with a matching schema in mongo
+[info]   - should return a json schema
+[info] .validateRequestJson()
+[info]   should with a valid json body
+[info]   - should return true
+[info]   should with an invalid json body
+[info]   - should return false
+2026-03-03 22:57:06,148 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:06,148 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55151] 
+2026-03-03 22:57:06,149 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55151] 
+2026-03-03 22:57:06,151 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:06,166 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:06,172 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:06,196 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:06,199 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-8] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:06,202 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-8] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:06,202 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+[info] BusinessDataUtilsSpec:
+[info] createBusinessData
+[info]   should create business documents
+[info]   - when Active Sole trader is true and ceased sole trader is true
+[info]   - when Active Sole trader is true and ceased sole trader is false
+[info]   - when Active Sole trader is false and ceased sole trader is true
+[info]   should return an empty Seq
+[info]   - when active sole trader is false and ceased sole trader is false
+[info] createPropertyData
+[info]   should create property documents
+[info]   - when UK property is true and foreign property is true
+[info]   - when UK property is true and foreign property is false
+[info]   - when UK property is false and foreign property is true
+[info]   should return an empty Seq
+[info]   - when UK property is false and foreign property is false
+2026-03-03 22:57:06,224 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:06,224 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-2] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55155] 
+2026-03-03 22:57:06,225 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-5] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55155] 
+2026-03-03 22:57:06,228 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-5] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+2026-03-03 22:57:06,248 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-1-thread-1] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:06,255 level=[WARN] logger=[application] thread=[pool-1-thread-1] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:06,279 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-1-thread-1] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:06,282 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-8] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:06,285 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-8] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:06,285 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-1-thread-1] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+[info] CalculationControllerSpec:
+[info] generateCalculationListTYS
+2026-03-03 22:57:06,303 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 1111AAAA] 
+[info] - should return status OK
+2026-03-03 22:57:06,305 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 1111AAAA] 
+[info] - should return status OK future taxYear
+2026-03-03 22:57:06,305 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 111AAA] 
+[info] - should return status BadRequest when internal error
+[info] generateCalculationSummary
+2026-03-03 22:57:06,306 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 1111AAAA] 
+[info] - should return status OK
+2026-03-03 22:57:06,307 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 1111AAAA] 
+[info] - should return status OK future taxYear
+2026-03-03 22:57:06,307 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation list for nino: 111AAA] 
+[info] - should return status BadRequest when internal error
+[info] getCalculationDetailsTYS
+2026-03-03 22:57:06,308 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation details for nino: 1111AAAA calculationId: 041f7e4d-87d9-4d4a-a296-3cfbdf] 
+2026-03-03 22:57:06,311 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation details for nino: 1111AAAA calculationId: 041f7e4d-87d9-4d4a-a296-3cfbdf] 
+2026-03-03 22:57:06,311 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation details for nino: 1111AAAA calculationId: 041f7e4d-87d9-4d4a-a296-3cfbdf] 
+[info] - should data for given Nino and TaxYear exists: return OK
+2026-03-03 22:57:06,311 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation details for nino:  calculationId: 041f7e4d-87d9-4d4a-a296-3cfbdf] 
+2026-03-03 22:57:06,312 level=[INFO] logger=[application] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[CalculationController][getCalculationDetailsTYS] Could not find endpoint in Dynamic Stub matching the URI: /income-tax/view/calculations/liability/23-24//041f7e4d-87d9-4d4a-a296-3cfbdf . Calling fallback default endpoint.] 
+[info] - should no data for given Nino and TaxYear: return NotFound
+2026-03-03 22:57:06,312 level=[INFO] logger=[application] thread=[pool-1-thread-1-ScalaTest-running-CalculationControllerSpec] rid=[] user=[] message=[Generating calculation details for nino: 1111AAAA calculationId: 041f7e4d-87d9-4d4a-a296-3cfbdf] 
+2026-03-03 22:57:06,312 level=[INFO] logger=[application] thread=[scala-execution-context-global-78] rid=[] user=[] message=[[CalculationController][getCalculationDetailsTYS] Could not find endpoint in Dynamic Stub matching the URI: /income-tax/view/calculations/liability/23-24/1111AAAA/041f7e4d-87d9-4d4a-a296-3cfbdf . Calling fallback default endpoint.] 
+[info] - should no data for given Nino and TaxYear: empty response
+[info] getCalcLegacy
+[info] - should data for given Nino and TaxYear exists: return OK
+2026-03-03 22:57:06,314 level=[INFO] logger=[application] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[CalculationController][getCalcLegacy] Could not find endpoint in Dynamic Stub matching the URI: /income-tax/view/calculations/liability//041f7e4d-87d9-4d4a-a296-3cfbdf . Calling fallback default endpoint.] 
+[info] - should no data for given Nino and TaxYear: return NotFound
+2026-03-03 22:57:06,314 level=[INFO] logger=[application] thread=[scala-execution-context-global-78] rid=[] user=[] message=[[CalculationController][getCalcLegacy] Could not find endpoint in Dynamic Stub matching the URI: /income-tax/view/calculations/liability/1111AAAA/041f7e4d-87d9-4d4a-a296-3cfbdf . Calling fallback default endpoint.] 
+[info] - should no data for given Nino and TaxYear: empty response
+2026-03-03 22:57:06,315 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-1-thread-1] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:06,315 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55159] 
+2026-03-03 22:57:06,315 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55159] 
+2026-03-03 22:57:06,317 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+[info] Run completed in 3 seconds, 697 milliseconds.
+[info] Total number of tests run: 96
+[info] Suites: completed 11, aborted 0
+[info] Tests: succeeded 96, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 5 s, completed 3 Mar 2026, 22:57:06
+[info] Headers created for 1 files:
+[info]   /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/it/test/uk/gov/hmrc/incometaxvcfsandstub/HealthEndpointIntegrationSpec.scala
+[info] compiling 1 Scala source to /Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/it/target/scala-2.13/test-classes ...
+[info] done compiling
+22:57:07,389 |-INFO in ch.qos.logback.classic.LoggerContext[default] - This is logback-classic version 1.5.22
+22:57:07,390 |-INFO in ch.qos.logback.classic.util.ContextInitializer@31a5a85f - No custom configurators were discovered as a service.
+22:57:07,390 |-INFO in ch.qos.logback.classic.util.ContextInitializer@31a5a85f - Trying to configure with ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:57:07,390 |-INFO in ch.qos.logback.classic.util.ContextInitializer@31a5a85f - Constructed configurator of type class ch.qos.logback.classic.util.DefaultJoranConfigurator
+22:57:07,390 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Could NOT find resource [logback-test.xml]
+22:57:07,390 |-INFO in ch.qos.logback.classic.LoggerContext[default] - Found resource [logback.xml] at [file:/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml]
+22:57:07,420 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - Main configuration file URL: file:/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml
+22:57:07,420 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - FileWatchList= {/Users/aashiqjenner/Documents/HMRC/income-tax-vc-fs-and-stub/target/scala-2.13/classes/logback.xml}
+22:57:07,420 |-INFO in ch.qos.logback.classic.model.processor.ConfigurationModelHandlerFull - URLWatchList= {}
+22:57:07,422 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [FILE]
+22:57:07,422 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.FileAppender]
+22:57:07,437 |-INFO in ch.qos.logback.core.FileAppender[FILE] - File property is set to [logs/income-tax-view-change-dynamic-stub.log]
+22:57:07,438 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - Processing appender named [STDOUT]
+22:57:07,438 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [ch.qos.logback.core.ConsoleAppender]
+22:57:07,439 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - NOTE: Writing to the console can be slow. Try to avoid logging to the 
+22:57:07,439 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - console in production environments, especially in high volume systems.
+22:57:07,439 |-INFO in ch.qos.logback.core.ConsoleAppender[STDOUT] - See also https://logback.qos.ch/codes.html#slowConsole
+22:57:07,439 |-WARN in ch.qos.logback.core.model.processor.AppenderModelHandler - Appender named [CONNECTOR_LOG_FILE] not referenced. Skipping further processing.
+22:57:07,440 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.google.inject] to INFO
+22:57:07,440 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [uk.gov] to WARN
+22:57:07,440 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [application] to WARN
+22:57:07,440 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.asynchttpclient.netty.channel.DefaultChannelPool] to WARN
+22:57:07,440 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [connector] to TRACE
+22:57:07,440 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[connector]
+22:57:07,441 |-INFO in ch.qos.logback.classic.model.processor.RootLoggerModelHandler - Setting level of ROOT logger to WARN
+22:57:07,441 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [FILE] to Logger[ROOT]
+22:57:07,441 |-INFO in ch.qos.logback.core.model.processor.AppenderRefModelHandler - Attaching appender named [STDOUT] to Logger[ROOT]
+22:57:07,441 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@4ca79a4c - End of configuration.
+22:57:07,441 |-INFO in ch.qos.logback.classic.joran.JoranConfigurator@5389f568 - Registering current configuration as safe fallback point
+22:57:07,443 |-INFO in ch.qos.logback.classic.util.ContextInitializer@31a5a85f - ch.qos.logback.classic.util.DefaultJoranConfigurator.configure() call lasted 51 milliseconds. ExecutionStatus=DO_NOT_INVOKE_NEXT_IF_ANY
+
+2026-03-03 22:57:07,532 level=[WARN] logger=[application] thread=[pool-12-thread-12] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:08,384 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-12-thread-12] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:08,455 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:08,467 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:08,472 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-12-thread-12] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:08,774 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-12-thread-12] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:08,777 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55164] 
+2026-03-03 22:57:08,780 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55164] 
+2026-03-03 22:57:08,786 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+[info] ItsaStatusISpec:
+[info] to do
+[info] - when one is always equals one
+2026-03-03 22:57:08,838 level=[WARN] logger=[application] thread=[pool-12-thread-12] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:08,875 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:08,880 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-5] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:08,881 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-12-thread-12] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:08,886 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-12-thread-12] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:08,905 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-12-thread-12] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:08,905 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-8] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55168] 
+2026-03-03 22:57:08,906 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55168] 
+2026-03-03 22:57:08,908 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+[info] ItsaStatusISpec:
+[info] to do
+[info] - when one is always equals one
+2026-03-03 22:57:08,924 level=[INFO] logger=[play.api.http.HttpErrorHandlerExceptions] thread=[pool-12-thread-12] rid=[] user=[] message=[Registering exception handler: guice-provision-exception-handler] 
+2026-03-03 22:57:08,930 level=[WARN] logger=[application] thread=[pool-12-thread-12] rid=[] user=[] message=[Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.] 
+2026-03-03 22:57:08,963 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-6] rid=[] user=[] message=[No ttl indexes were found for collection schemas] 
+2026-03-03 22:57:08,967 level=[WARN] logger=[uk.gov.hmrc.mongo.MongoUtils] thread=[application-pekko.actor.default-dispatcher-7] rid=[] user=[] message=[No ttl indexes were found for collection data] 
+2026-03-03 22:57:08,968 level=[WARN] logger=[play.api.i18n.Lang] thread=[pool-12-thread-12] rid=[] user=[] message=[application.langs is deprecated, use play.i18n.langs instead] 
+2026-03-03 22:57:08,971 level=[WARN] logger=[uk.gov.hmrc.play.bootstrap.audit.DisabledDatastreamMetricsProvider] thread=[pool-12-thread-12] rid=[] user=[] message=[DatastreamMetrics have been disabled since metrics are disabled: ENABLE IN ALL TESTING + PRODUCTION ENVIRONMENTS] 
+2026-03-03 22:57:09,288 level=[INFO] logger=[play.api.internal.libs.concurrent.CoordinatedShutdownSupport] thread=[pool-12-thread-12] rid=[] user=[] message=[Starting synchronous coordinated shutdown with ServerStoppedReason reason and 2147513000 milliseconds timeout] 
+2026-03-03 22:57:09,289 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-3] rid=[] user=[] message=[Unbinding /0:0:0:0:0:0:0:0:55172] 
+2026-03-03 22:57:09,289 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Terminating server binding for /0:0:0:0:0:0:0:0:55172] 
+2026-03-03 22:57:09,297 level=[INFO] logger=[play.core.server.PekkoHttpServer] thread=[application-pekko.actor.internal-dispatcher-4] rid=[] user=[] message=[Running provided shutdown stop hooks] 
+[info] HealthEndpointIntegrationSpec:
+[info] service health endpoint
+[info] - should respond with 200 status
+[info] Run completed in 2 seconds, 72 milliseconds.
+[info] Total number of tests run: 3
+[info] Suites: completed 3, aborted 0
+[info] Tests: succeeded 3, failed 0, canceled 0, ignored 0, pending 0
+[info] All tests passed.
+[success] Total time: 3 s, completed 3 Mar 2026, 22:57:09

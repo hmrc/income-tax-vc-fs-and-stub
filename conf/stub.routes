@@ -1,0 +1,68 @@
+# Stub Response Routes
+
+## ->         /hmrc-frontend           hmrcfrontend.Routes
+
+### IF #1523 route
+GET         /income-tax/view/calculations/liability/$nino<[A-Z0-9]{9}>/:calcId                                                  uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.getCalcLegacy(nino: String, calcId: String)
+
+### IF #1896 - v9.0.0 ###
+GET         /income-tax/view/calculations/liability/$taxYearRange<[0-9]{2}-[0-9]{2}>/:nino                                      uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.generateCalculationListTYS(nino:String, taxYearRange: String)
+GET         /income-tax-view-change/calculation-list/:nino/$taxYearRange<[0-9]{2}-[0-9]{2}>/overwrite/:crystallisationStatus    uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.overwriteCalculationList(nino:String, taxYearRange: String, crystallisationStatus: String)
+
+### HIP #5624 ###
+GET         /itsa/income-tax/v1/$taxYearRange<[0-9]{2}-[0-9]{2}>/view/calculations/liability/:nino                              uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.generateHipCalculationListTYS(nino:String, taxYearRange: String)
+### IF #2083 - v11.0.3 ###
+GET         /income-tax/$taxYearRange<[0-9]{2}-[0-9]{2}>/view/:nino/calculations-summary                                      uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.generateCalculationSummary(nino:String, taxYearRange: String)
+
+### override IF #2083 or 1896 (tax year dependant) ###
+GET         /income-tax-view-change/calculation-summary/:nino/$taxYearRange<[0-9]{2}-[0-9]{2}>/overwrite/:crystallisationStatus    uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.overwriteCalculationList(nino:String, taxYearRange: String, crystallisationStatus: String)
+
+### IF #1885 - v9.1.0 ###
+GET         /income-tax/view/calculations/liability/:taxYearRange/:nino/:calculationId                                          uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.getCalculationDetailsTYS(nino:String, calculationId:String, taxYearRange: String)
+
+### DES #1878 Opt Out Override Route ###
+GET         /income-tax-view-change/itsa-status/:nino/$taxYearRange<[0-9]{2}-[0-9]{2}>/overwrite/:itsaStatus                    uk.gov.hmrc.incometaxvcfsandstub.controllers.ItsaStatusController.overwriteItsaStatus(nino:String, taxYearRange: String, itsaStatus: String)
+
+### Mapping to No active Properties UK and Foreign ###
+GET         /etmp/RESTAdapter/itsa/taxpayer/business-details                              uk.gov.hmrc.incometaxvcfsandstub.controllers.BusinessDetailsRequestController.transform(mtdReference: Option[String])
+
++nocsrf
+POST        /income-tax-view-change/override/business-data/:mtdid                     uk.gov.hmrc.incometaxvcfsandstub.controllers.BusinessDetailsRequestController.overwriteBusinessData(mtdid: String)
+
+### Intercepting API #1553 after Poa Amount updated
+###GET         /enterprise/02.00.00/financial-data/NINO/:nino/ITSA                            uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.transform(nino: String)
+# API #1553  => #5277 Hip migration
+GET         /etmp/RESTAdapter/itsa/taxpayer/financial-details             uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.transform()
+
+# API #1885 => #5294 Hip migration
+GET         /itsa/income-tax/v1/$taxYearRange<[0-9]{2}-[0-9]{2}>/view/calculations/liability/:nino/:calculationId        uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.getCalculationDetailsHip(nino: String, calculationId: String, taxYearRange: String)
+
+### Enrolment Store Proxy route
++ nocsrf
+GET         /enrolment-store-proxy/enrolment-store/groups/:groupId/enrolments         uk.gov.hmrc.incometaxvcfsandstub.controllers.EnrolmentStoreProxyController.getUTRList(groupId: String)
+
+### Intercepting API #1776 Submit Income Sources data for error response ###
++ nocsrf
+PUT         /income-tax/business-detail/income-source                                 uk.gov.hmrc.incometaxvcfsandstub.controllers.UpdateIncomeSourceController.mapUpdateIncomeSourceStub()
+
+### Intercepting API #1773 Submit POA data for error response/success page ###
++nocsrf
+POST        /income-tax/calculations/POA/ClaimToAdjust                                uk.gov.hmrc.incometaxvcfsandstub.controllers.SubmitPoaController.interceptPoaSubmit()
+
+### HIP #5191  (this was #1404 on DES / IF) ###
+GET         /itsd/calculations/liability/:nino                                        uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.generateCalculationList(nino:String, taxYear:Option[Int])
+
+### HIP #1878 ###
+GET         /itsd/person-itd/itsa-status/:nino                                        uk.gov.hmrc.incometaxvcfsandstub.controllers.ItsaStatusController.getHIPITSAStatus(nino:String, taxYear: String, futureYears: Boolean, history: Boolean)
+
+### HIP #5234 ###
+GET         /income-tax-view-change/repayments/:nino                                  uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentHistoryController.generateHipRepaymentHistoryByNino(nino: String)
+GET         /income-tax-view-change/repayments/:nino/repaymentId/:repaymentId         uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentHistoryController.generateHipRepaymentHistoryByRepaymentId(nino: String, repaymentId: String)
+
+GET         /*url                                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController.getRequestHandler(url)
+
++ nocsrf
+POST        /*url                                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController.postRequestHandler(url)
+
++ nocsrf
+PUT         /*url                                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController.putRequestHandler(url)

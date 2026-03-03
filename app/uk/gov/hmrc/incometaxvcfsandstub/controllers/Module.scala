@@ -14,14 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import com.google.inject.AbstractModule
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
-
-  val appName: String = config.get[String]("appName")
-
+class Module extends AbstractModule {
+  override def configure(): Unit = ()
 }
