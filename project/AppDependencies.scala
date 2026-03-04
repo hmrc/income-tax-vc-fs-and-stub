@@ -3,9 +3,9 @@ import sbt._
 
 object AppDependencies {
 
-  private val bootstrapVersion = "10.6.0"
+  private val bootstrapVersion = "10.7.0"
   private val hmrcMongoVersion = "2.12.0"
-  private val circeVersion = "0.14.10"
+  private val circeVersion = "0.14.15"
   private val jsonSchemaValidatorVersion = "2.2.14"
 
 
@@ -14,9 +14,10 @@ object AppDependencies {
     "uk.gov.hmrc"       %% "bootstrap-frontend-play-30"  % bootstrapVersion,
     "uk.gov.hmrc.mongo" %% "hmrc-mongo-play-30"          % hmrcMongoVersion,
     "com.github.java-json-tools" % "json-schema-validator" % jsonSchemaValidatorVersion,
-    "io.circe"          %% "circe-core"                  % circeVersion,
+    "com.github.fge"    % "json-schema-validator"        % jsonSchemaValidatorVersion,
     "io.circe"          %% "circe-parser"                % circeVersion,
-    "io.circe"          %% "circe-generic"               % circeVersion
+    "io.circe"          %% "circe-generic"               % circeVersion,
+    "io.circe"          %% "circe-yaml"                  % "1.15.0"
   )
 
   val test = Seq(

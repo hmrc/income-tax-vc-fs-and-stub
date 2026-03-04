@@ -1,7 +1,7 @@
 
 # income-tax-vc-fs-and-stub
 
-This is a placeholder README.md for a new repository
+This is a service to override feature switches and stubs the APIs called by View and Change services.
 
 ### License
 

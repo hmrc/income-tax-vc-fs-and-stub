@@ -1,12 +1,5 @@
 import uk.gov.hmrc.DefaultBuildSettings
 
-libraryDependencies ++= Seq(
-  "com.github.fge" % "json-schema-validator" % "2.2.6",
-  "io.circe" %% "circe-core" % "0.14.12",
-  "io.circe" %% "circe-parser" % "0.14.12",
-  "io.circe" %% "circe-yaml" % "1.15.0"
-)
-
 ThisBuild / majorVersion := 0
 ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / scalacOptions += "-Wconf:msg=Flag.*repeatedly:s"
@@ -21,6 +14,7 @@ lazy val microservice = Project("income-tax-vc-fs-and-stub", file("."))
     scalacOptions += "-Wconf:src=routes/.*:s",
   )
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(PlayKeys.playDefaultPort := 65535)
 
 lazy val it = project
   .enablePlugins(PlayScala)
