@@ -22,7 +22,6 @@ import org.mongodb.scala.model.Filters._
 import play.api.libs.json.JsValue
 import play.api.mvc._
 import play.api.{Configuration, Logging}
-import uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod._
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
 import uk.gov.hmrc.incometaxvcfsandstub.utils.AddDelays

@@ -19,7 +19,6 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logger}
-import uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.time.{OffsetDateTime, ZoneOffset}

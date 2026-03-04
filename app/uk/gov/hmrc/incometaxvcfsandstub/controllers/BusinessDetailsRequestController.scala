@@ -19,7 +19,6 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 import org.apache.pekko.actor.ActorSystem
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import play.api.{Configuration, Logging}
-import uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController
 import uk.gov.hmrc.incometaxvcfsandstub.models.BusinessDetailsModel
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.DataRepository
 import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, BusinessDataUtils}
