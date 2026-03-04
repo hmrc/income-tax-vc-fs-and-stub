@@ -28,10 +28,11 @@ import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, PoaUtils}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.net.URI
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
+@Singleton
 class SubmitPoaController @Inject() (
     cc:                       MessagesControllerComponents,
     requestHandlerController: RequestHandlerController,
