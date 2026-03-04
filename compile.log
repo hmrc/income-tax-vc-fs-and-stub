@@ -119,14 +119,14 @@
 [info]   when validateUrlMatch returns 'true'
 [info]     should when validateResponseJson returns 'true'
 [info]     - should return Status OK (200) if data successfully added to stub
-2026-03-03 22:57:05,259 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-78] rid=[] user=[] message=[[SetupDataController][addStubDataToDB] Failed to add data to Stub::DataModel(1234,2345,GET,200,Some({}))] 
+2026-03-03 22:57:05,259 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupDataController] thread=[scala-execution-context-global-78] rid=[] user=[] message=[[SetupDataController][addStubDataToDB] Failed to add data to Stub::DataModel(1234,2345,GET,200,Some({}))]
 [info]     - should return Status InternalServerError (500) if unable to add data to the stub
-2026-03-03 22:57:05,261 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateResponseJson failed1234] 
+2026-03-03 22:57:05,261 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateResponseJson failed1234]
 [info]   - should return Status BadRequest (400) when validateResponseJson returns 'false'
 [info]   - should return Status when validateResponseJson returns 'false'
 [info]   - should return Status InternalServerError (500) when validateResponseJson returns 'false'
 [info]   when validateUrlMatch returns 'false'
-2026-03-03 22:57:05,276 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateUrlMatch failed1234] 
+2026-03-03 22:57:05,276 level=[ERROR] logger=[uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupDataController] thread=[scala-execution-context-global-79] rid=[] user=[] message=[[SetupDataController][addData] validateUrlMatch failed1234]
 [info]   - should return Status BadRequest (400)
 [info]   when not a GET request
 [info]   - should return Status BadRequest (400)

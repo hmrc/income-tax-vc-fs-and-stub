@@ -23,6 +23,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupSchemaController
 import uk.gov.hmrc.incometaxvcfsandstub.testUtils.TestSupport
 
 import scala.concurrent.Future

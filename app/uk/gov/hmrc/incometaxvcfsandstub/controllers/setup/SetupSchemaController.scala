@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.controllers
+package uk.gov.hmrc.incometaxvcfsandstub.controllers.setup
 
 import play.api.Logging
 import play.api.libs.json.JsValue

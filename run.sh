@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sbt 'run 9084'
+sbt 'run 65535'
