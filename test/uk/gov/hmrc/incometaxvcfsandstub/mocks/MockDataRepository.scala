@@ -24,8 +24,6 @@ import org.mongodb.scala.result.{DeleteResult, UpdateResult}
 import org.scalatestplus.mockito.MockitoSugar
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.DataRepository
 import uk.gov.hmrc.incometaxvcfsandstub.testUtils.TestSupport
-import scala.concurrent.ExecutionContext
-import scala.concurrent.ExecutionContext.Implicits.global
 
 import scala.concurrent.Future
 
@@ -38,7 +36,7 @@ trait MockDataRepository extends TestSupport with MockitoSugar {
     reset(mockDataRepository)
   }
 
-  def mockAddEntry(document: DataModel)(response: UpdateResult) (implicit ec: ExecutionContext): OngoingStubbing[Future[UpdateResult]] = {
+  def mockAddEntry(document: DataModel)(response: UpdateResult): OngoingStubbing[Future[UpdateResult]] = {
     when(mockDataRepository.addEntry(ArgumentMatchers.eq(document))).thenReturn(Future.successful(response))
   }
 
