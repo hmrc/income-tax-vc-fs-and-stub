@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.models.admin
+package uk.gov.hmrc.incometaxvcfsandstub.models
 
 import play.api.Logger
 import play.api.libs.json._

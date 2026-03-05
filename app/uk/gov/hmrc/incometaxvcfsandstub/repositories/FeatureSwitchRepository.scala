@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.testOnly.repository
+package uk.gov.hmrc.incometaxvcfsandstub.repositories
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.admin.{FeatureSwitch, FeatureSwitchName}
 import org.mongodb.scala.ToSingleObservablePublisher
 import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Filters.*
 import play.api.Configuration
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.mongo.transaction.Transactions

@@ -21,7 +21,6 @@ import org.mongodb.scala.model.Filters.equal
 import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logger, Logging}
-import uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.GET
 import uk.gov.hmrc.incometaxvcfsandstub.models._
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
