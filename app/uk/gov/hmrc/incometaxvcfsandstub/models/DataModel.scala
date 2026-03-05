@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.models
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json.{JsValue, Json, OFormat}
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
+case class DataModel(
+    _id:      String, // URL of the Request
+    schemaId: String, // Name/ID of the Schema to Validate Against
+    method:   String,
+    status:   Int,
+    response: Option[JsValue])
 
-  val appName: String = config.get[String]("appName")
-
+object DataModel {
+  implicit val formats: OFormat[DataModel] = Json.format[DataModel]
 }

@@ -1,0 +1,8 @@
+# microservice specific routes
+
+POST        /schema                                                 uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupSchemaController.addSchema
+DELETE      /schema                                                 uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupSchemaController.removeSchema(id: String)
+DELETE      /all-schemas                                            uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupSchemaController.removeAll
++ nocsrf
+POST        /data                                                   uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupDataController.addData
+DELETE      /all-data                                               uk.gov.hmrc.incometaxvcfsandstub.controllers.setup.SetupDataController.removeAll

@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.config
+package uk.gov.hmrc.incometaxvcfsandstub.utils
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
+import play.api.libs.json.{JsObject, Json, Writes}
 
-@Singleton
-class AppConfig @Inject()(config: Configuration) {
+object Utilities {
 
-  val appName: String = config.get[String]("appName")
+  implicit class JsonUtil[A](json: JsObject) {
+    def ++(key: String, optValue: Option[A])(implicit writes: Writes[A]): JsObject = {
+      json ++ optValue.fold(Json.obj())(value => Json.obj(key -> value))
+    }
+  }
 
 }

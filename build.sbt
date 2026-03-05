@@ -14,6 +14,7 @@ lazy val microservice = Project("income-tax-vc-fs-and-stub", file("."))
     scalacOptions += "-Wconf:src=routes/.*:s",
   )
   .settings(CodeCoverageSettings.settings: _*)
+  .settings(PlayKeys.playDefaultPort := 65535)
 
 lazy val it = project
   .enablePlugins(PlayScala)
