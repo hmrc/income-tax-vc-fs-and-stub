@@ -87,4 +87,11 @@ class FeatureSwitchRepository @Inject()(val mongoComponent: MongoComponent,
       _ <- collection.insertMany(switches).toFuture().map(_ => ())
     } yield ()
   }
+
+  def deleteAllFeatureSwitches(): Future[Unit] =
+    collection
+      .deleteMany(Filters.empty())
+      .toFuture()
+      .map(_ => ())
+
 }
