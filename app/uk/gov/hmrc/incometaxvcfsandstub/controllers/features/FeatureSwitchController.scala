@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.controllers.features
 
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitchName, FeatureSwitches}
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitches, FeatureSwitchName}
+
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.FeatureSwitchRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -30,19 +32,25 @@ class FeatureSwitchController @Inject()(
                                          featureSwitchRepository: FeatureSwitchRepository
                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
   
-  def disableAll(): Action[AnyContent] = Action.async {
+  def disableAll: Action[AnyContent] = Action.async {
     featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> false).toMap).map{ _ =>
       Status(NO_CONTENT)
     }
   }
-  
-  def enableAll(): Action[AnyContent] = Action.async {
+
+  def enableAll: Action[AnyContent] = Action.async {
     featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> true).toMap).map{ _ =>
       Status(NO_CONTENT)
     }
   }
-  
-  def resetToProd(): Action[AnyContent] = Action.async {
+
+  def getAll: Action[AnyContent] = Action.async {
+    featureSwitchRepository.getFeatureSwitches.map { featureSwitches =>
+      Status(OK)(Json.toJson(featureSwitches))
+    }
+  }
+
+  def resetToProd: Action[AnyContent] = Action.async {
     featureSwitchRepository.deleteAllFeatureSwitches().map { _ =>
       Status(NO_CONTENT)
     }
