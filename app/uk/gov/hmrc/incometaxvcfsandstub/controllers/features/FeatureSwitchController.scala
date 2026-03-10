@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.incometaxvcfsandstub.controllers
+package uk.gov.hmrc.incometaxvcfsandstub.controllers.features
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.incometaxvcfsandstub.models.FeatureSwitchName
