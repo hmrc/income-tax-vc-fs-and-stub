@@ -1,4 +1,4 @@
 + nocsrf
 POST /reset-to-prod                                                          uk.gov.hmrc.incometaxvcfsandstub.controllers.FeatureSwitchController.resetToProd()
 + nocsrf
-POST /enable-all                                                             uk.gov.hmrc.incometaxvcfsandstub.controllers.FeatureSwitchController.enableAll()
+POST /enable-all        sbt term                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.FeatureSwitchController.enableAll()
