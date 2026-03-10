@@ -235,5 +235,3 @@ case object OverseasBusinessAddress extends FeatureSwitchName {
   override val name: String = "overseas-business-address"
   override val toString: String = "Overseas Business Address"
 }
-
-
