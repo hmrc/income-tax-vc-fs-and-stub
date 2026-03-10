@@ -30,6 +30,12 @@ class FeatureSwitchController @Inject()(
                                          featureSwitchRepository: FeatureSwitchRepository
                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
   
+  def disableAll(): Action[AnyContent] = Action.async {
+    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> false).toMap).map{ _ =>
+      Status(NO_CONTENT)
+    }
+  }
+  
   def enableAll(): Action[AnyContent] = Action.async {
     featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> true).toMap).map{ _ =>
       Status(NO_CONTENT)

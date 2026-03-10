@@ -1,6 +1,8 @@
 + nocsrf
-POST    /reset-to-prod                  uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.resetToProd()
+POST /reset-to-prod                                                          uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.resetToProd()
 + nocsrf
-POST    /enable-all                     uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.enableAll()
+POST /enable-all                                                             uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.enableAll()
 + nocsrf
-POST    /                               uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.setFeatureSwitches()
+POST /disable-all                                                            uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.disableAll()
++ nocsrf
+POST /                                                                       uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.setFeatureSwitches()
