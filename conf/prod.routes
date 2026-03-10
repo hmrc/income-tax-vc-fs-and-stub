@@ -2,5 +2,6 @@
 # ->        /hmrc-frontend           hmrcfrontend.Routes
 
 ->         /setup                                          setup.Routes
+->         /features                                       features.Routes
 ->         /                                               health.Routes
 ->         /                                               stub.Routes
