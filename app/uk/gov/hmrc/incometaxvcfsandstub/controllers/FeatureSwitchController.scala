@@ -17,6 +17,7 @@
 package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.incometaxvcfsandstub.models.FeatureSwitchName
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.FeatureSwitchRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -28,7 +29,13 @@ class FeatureSwitchController @Inject()(
                                          cc: ControllerComponents,
                                          featureSwitchRepository: FeatureSwitchRepository
                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
-
+  
+  def enableAll(): Action[AnyContent] = Action.async {
+    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> true).toMap).map{ _ =>
+      Status(NO_CONTENT)
+    }
+  }
+  
   def resetToProd(): Action[AnyContent] = Action.async {
     featureSwitchRepository.deleteAllFeatureSwitches().map { _ =>
       Status(NO_CONTENT)

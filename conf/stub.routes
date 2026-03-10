@@ -66,5 +66,3 @@ POST        /*url                                                               
 
 + nocsrf
 PUT         /*url                                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController.putRequestHandler(url)
-
-POST /features/reset-to-prod                                                          uk.gov.hmrc.incometaxvcfsandstub.controllers.FeatureSwitchController.resetToProd()
