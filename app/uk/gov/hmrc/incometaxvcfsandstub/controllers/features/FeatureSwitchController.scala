@@ -17,12 +17,12 @@
 package uk.gov.hmrc.incometaxvcfsandstub.controllers.features
 
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.incometaxvcfsandstub.models.FeatureSwitchName
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitchName, FeatureSwitches}
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.FeatureSwitchRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class FeatureSwitchController @Inject()(
@@ -45,6 +45,20 @@ class FeatureSwitchController @Inject()(
   def resetToProd(): Action[AnyContent] = Action.async {
     featureSwitchRepository.deleteAllFeatureSwitches().map { _ =>
       Status(NO_CONTENT)
+    }
+  }
+
+  def setFeatureSwitches(): Action[AnyContent] = Action.async { implicit request =>
+    request.body.asJson match {
+      case None =>
+        Future.successful(BadRequest("No JSON found - Expected JSON data"))
+      case Some(json) =>
+        json.validate[FeatureSwitches].fold(
+          invalid = _ =>
+            Future.successful(BadRequest("Invalid JSON data")),
+          valid = featureSwitches =>
+            featureSwitchRepository.setFeatureSwitches(featureSwitches.toMap).map(_ => NoContent)
+        )
     }
   }
 }
