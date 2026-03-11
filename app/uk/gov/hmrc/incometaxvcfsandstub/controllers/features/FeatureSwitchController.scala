@@ -31,15 +31,15 @@ class FeatureSwitchController @Inject()(
                                          cc: ControllerComponents,
                                          featureSwitchRepository: FeatureSwitchRepository
                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
-  
+
   def disableAll: Action[AnyContent] = Action.async {
-    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> false).toMap).map{ _ =>
+    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> false).toMap).map { _ =>
       Status(NO_CONTENT)
     }
   }
 
   def enableAll: Action[AnyContent] = Action.async {
-    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> true).toMap).map{ _ =>
+    featureSwitchRepository.setFeatureSwitches(FeatureSwitchName.allFeatureSwitches.map(_ -> true).toMap).map { _ =>
       Status(NO_CONTENT)
     }
   }
@@ -69,4 +69,16 @@ class FeatureSwitchController @Inject()(
         )
     }
   }
+
+  def setFeatureSwitch(featureName: String, isEnabled: Boolean): Action[AnyContent] =
+    Action.async { implicit request =>
+      FeatureSwitchName.get(featureName) match {
+        case Some(feature) =>
+          featureSwitchRepository.setFeatureSwitch(feature, isEnabled)
+          Future.successful(Status(NO_CONTENT))
+        case None =>
+          Future.successful(BadRequest(s"Unknown feature switch: $featureName"))
+      }
+    }
+
 }
