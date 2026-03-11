@@ -9,4 +9,4 @@ GET /                                                                        uk.
 + nocsrf
 POST /                                                                       uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.setFeatureSwitches()
 + nocsrf
-PUT /feature/:featureName                                                    uk.gov.hmrc.incometaxvcfsandstub.controllers.FeatureSwitchController.setFeatureSwitch(featureName: String, isEnabled: Boolean)
+PUT /features/:featureName                                                    uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.setFeatureSwitch(featureName: String, isEnabled: Boolean)
