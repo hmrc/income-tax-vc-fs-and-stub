@@ -18,8 +18,7 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers.features
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitches, FeatureSwitchName}
-
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName, FeatureSwitches}
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.FeatureSwitchRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -47,6 +46,17 @@ class FeatureSwitchController @Inject()(
   def getAll: Action[AnyContent] = Action.async {
     featureSwitchRepository.getFeatureSwitches.map { featureSwitches =>
       Status(OK)(Json.toJson(featureSwitches))
+    }
+  }
+
+  def get(featureSwitchName: String): Action[AnyContent] = Action.async {
+    FeatureSwitchName.get(featureSwitchName) match {
+      case Some(feature) =>
+        featureSwitchRepository.getFeatureSwitch(feature).map { featureSwitch =>
+          Status(OK)(Json.toJson(featureSwitch))
+        }
+      case None =>
+        Future.successful(BadRequest(s"Unknown feature switch: $featureSwitchName"))
     }
   }
 
