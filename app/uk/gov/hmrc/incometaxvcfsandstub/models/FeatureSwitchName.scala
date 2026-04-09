@@ -101,6 +101,7 @@ object FeatureSwitchName {
 
   val allFeatureSwitches: immutable.Set[FeatureSwitchName] =
     Set(
+      RecentActivity,
       ITSASubmissionIntegration,
       ChargeHistory,
       NavBarFs,
@@ -124,6 +125,12 @@ object FeatureSwitchName {
     )
 
   def get(str: String): Option[FeatureSwitchName] = allFeatureSwitches find (_.name == str)
+}
+
+case object RecentActivity extends FeatureSwitchName {
+  override val name: String = "recent-activity"
+
+  override def toString: String = "Recent Activity"
 }
 
 case object ITSASubmissionIntegration extends FeatureSwitchName {
