@@ -77,6 +77,8 @@ object FeatureSwitchName {
       JsSuccess(NewHomePage)
     case JsString(OverseasBusinessAddress.name) =>
       JsSuccess(OverseasBusinessAddress)
+    case JsString(RecentActivity.name) =>
+      JsSuccess(RecentActivity)
     case invalidName =>
       Logger("application").error(s"Invalid feature switch Json found: $invalidName")
       JsSuccess(InvalidFS)
