@@ -77,6 +77,8 @@ object FeatureSwitchName {
       JsSuccess(NewHomePage)
     case JsString(OverseasBusinessAddress.name) =>
       JsSuccess(OverseasBusinessAddress)
+    case JsString(RecentActivity.name) =>
+      JsSuccess(RecentActivity)
     case invalidName =>
       Logger("application").error(s"Invalid feature switch Json found: $invalidName")
       JsSuccess(InvalidFS)
@@ -101,6 +103,7 @@ object FeatureSwitchName {
 
   val allFeatureSwitches: immutable.Set[FeatureSwitchName] =
     Set(
+      RecentActivity,
       ITSASubmissionIntegration,
       ChargeHistory,
       NavBarFs,
@@ -124,6 +127,12 @@ object FeatureSwitchName {
     )
 
   def get(str: String): Option[FeatureSwitchName] = allFeatureSwitches find (_.name == str)
+}
+
+case object RecentActivity extends FeatureSwitchName {
+  override val name: String = "recent-activity"
+
+  override def toString: String = "Recent Activity"
 }
 
 case object ITSASubmissionIntegration extends FeatureSwitchName {
