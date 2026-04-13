@@ -24,7 +24,7 @@ object ObligationsDataUtils {
   final val obligationsDataKey = "response.obligations"
   private val today = LocalDate.now()
 
-  def createObligationsData() = {
+  def createObligationsData(): Seq[Document] = {
     val currentTaxYearStart = if(today.isBefore(LocalDate.of(today.getYear, 4, 6))) LocalDate.of(today.minusYears(1).getYear, 4, 6) else LocalDate.of(today.getYear, 4, 6)
     val taxYearTaxReturnDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31)
 
@@ -37,19 +37,11 @@ object ObligationsDataUtils {
       "obligationDetails" -> Seq(
         Document(
           "status" -> "F",
-          "inboundCorrespondenceFromDate" -> today.minusMonths(11).toString,
-          "inboundCorrespondenceToDate" -> today.minusMonths(8).toString,
-          "inboundCorrespondenceDueDate" -> today.minusMonths(1).toString,
-          "inboundCorrespondenceDateReceived" -> today.minusMonths(2).toString,
-          "periodKey" -> "#001"
-        ),
-        Document(
-          "status" -> "F",
-          "inboundCorrespondenceFromDate" -> today.minusMonths(8).toString,
-          "inboundCorrespondenceToDate" -> today.minusMonths(5).toString,
-          "inboundCorrespondenceDueDate" -> today.plusMonths(1).toString,
+          s"inboundCorrespondenceFromDate" -> currentTaxYearStart.minusYears(1).toString,
+          s"inboundCorrespondenceToDate" -> currentTaxYearStart.minusDays(1).toString,
+          "inboundCorrespondenceDueDate" -> taxYearTaxReturnDueDate.toString,
           "inboundCorrespondenceDateReceived" -> today.minusMonths(1).toString,
-          "periodKey" -> "#002",
+          "periodKey" -> "#001"
         ),
     )
     ),

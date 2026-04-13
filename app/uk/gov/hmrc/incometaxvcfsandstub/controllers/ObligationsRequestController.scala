@@ -31,7 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
-                                             requestHandlerController: RequestHandlerController,
                                              dataRepository: DataRepository)
                                             (implicit val ec: ExecutionContext,
                                                   val actorSystem: ActorSystem,
