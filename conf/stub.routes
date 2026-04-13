@@ -29,6 +29,9 @@ GET         /etmp/RESTAdapter/itsa/taxpayer/business-details                    
 +nocsrf
 POST        /income-tax-view-change/override/business-data/:mtdid                     uk.gov.hmrc.incometaxvcfsandstub.controllers.BusinessDetailsRequestController.overwriteBusinessData(mtdid: String)
 
++nocsrf
+POST        /income-tax-view-change/override/obligations-data/:nino                     uk.gov.hmrc.incometaxvcfsandstub.controllers.ObligationsRequestController.overwriteObligationsData(nino: String)
+
 ### Intercepting API #1553 after Poa Amount updated
 ###GET         /enterprise/02.00.00/financial-data/NINO/:nino/ITSA                            uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.transform(nino: String)
 # API #1553  => #5277 Hip migration
