@@ -62,6 +62,9 @@ GET         /itsd/person-itd/itsa-status/:nino                                  
 GET         /income-tax-view-change/repayments/:nino                                  uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentHistoryController.generateHipRepaymentHistoryByNino(nino: String)
 GET         /income-tax-view-change/repayments/:nino/repaymentId/:repaymentId         uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentHistoryController.generateHipRepaymentHistoryByRepaymentId(nino: String, repaymentId: String)
 
++nocsrf
+POST        /income-tax-view-change/create-custom-user                                uk.gov.hmrc.incometaxvcfsandstub.controllers.CreateCustomUserController.createCustomUser()
+
 GET         /*url                                                                     uk.gov.hmrc.incometaxvcfsandstub.controllers.RequestHandlerController.getRequestHandler(url)
 
 + nocsrf
