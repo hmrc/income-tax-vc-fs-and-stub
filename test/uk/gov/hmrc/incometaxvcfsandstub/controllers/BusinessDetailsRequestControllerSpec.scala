@@ -49,11 +49,11 @@ class BusinessDetailsRequestControllerSpec extends TestSupport with DataHelper w
     "return status OK" when {
       "overwriting business data for a given MTD ID" in {
         lazy val request = FakeRequest().withJsonBody(successModel).withHeaders(("Content-Type", "application/json"))
-        when(mockDataRepository.clearAndReplace(any(), any(), any())).thenReturn(Future.successful(successUpdateResult))
-
-        val result = TestBusinessDetailsRequestController.overwriteBusinessData(mtdId)(request)
-
-        status(result) shouldBe OK
+          when(mockDataRepository.clearAndReplace(any(), any(), any())).thenReturn(Future.successful(successUpdateResult))
+  
+          val result = TestBusinessDetailsRequestController.overwriteBusinessData(mtdId)(request)
+  
+          status(result) shouldBe OK
       }
     }
 

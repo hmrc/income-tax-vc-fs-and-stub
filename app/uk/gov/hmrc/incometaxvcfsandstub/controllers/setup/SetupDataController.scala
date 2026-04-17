@@ -50,8 +50,7 @@ class SetupDataController @Inject() (
           schemaValidation.validateUrlMatch(json.schemaId, json._id) flatMap {
             case true =>
               schemaValidation.validateResponseJson(json.schemaId, json.response) flatMap {
-                case true if json.schemaId == "getDesObligations" =>
-                  addStubDataToDB(updateObligationsWithDateParameters(json))
+                case true if json.schemaId == "getDesObligations" => addStubDataToDB(json)
                 case true | `ignoreJsonValidation` =>
                   val modifiedJson = PopulateYear(Json.toJson(json)).as[DataModel]
                   addStubDataToDB(modifiedJson)
@@ -72,17 +71,6 @@ class SetupDataController @Inject() (
     ).recover {
       case _ => InternalServerError("Error Parsing Json DataModel")
     }
-  }
-
-  private def updateObligationsWithDateParameters(data: DataModel) = {
-    val fulfilledObligations: Boolean   = data._id.split("[?]").last.split("[&]").contains("status=F")
-    val datesSet:             Boolean   = data._id.contains("&from=") && data._id.contains("&to=")
-    val toDate:               LocalDate = LocalDate.now()
-    val days365 = 365
-    val fromDate: LocalDate = toDate.minusDays(days365)
-
-    if (fulfilledObligations && !datesSet) data.copy(_id = data._id + s"&from=$fromDate&to=$toDate")
-    else data
   }
 
   private def addStubDataToDB(json: DataModel): Future[Result] = {
