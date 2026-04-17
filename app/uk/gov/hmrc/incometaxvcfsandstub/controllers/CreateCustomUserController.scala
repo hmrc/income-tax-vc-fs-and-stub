@@ -60,13 +60,12 @@ class CreateCustomUserController @Inject()(cc: MessagesControllerComponents, dat
           valid = customUserData => {
             TaxYear.createTaxYearGivenTaxYearRange(customUserData.previousTaxYear) match {
               case Some(taxYear) =>
-                val calcUrl = createOverwriteCalculationListUrl(customUserNino, taxYear)
                 val businessUrl = overrideBusinessDetailsUrl(customUserMtdid)
 
                 val decoupledModel = CustomUserUtils.translateCode(customUserData.userCode)
                 
-                val businessData = BusinessDataUtils.createBusinessData(decoupledModel.numberOfSoleTraders > 0, false)
-                val propertyData = BusinessDataUtils.createPropertyData(decoupledModel.activeUkProperty, decoupledModel.activeForeignProperty)
+                val businessData = BusinessDataUtils.createBusinessData(decoupledModel.incomeSources.activeSoleTrader, false)
+                val propertyData = BusinessDataUtils.createPropertyData(decoupledModel.incomeSources.activeUkProperty, decoupledModel.incomeSources.activeForeignProperty)
                 for {
                   businessUpdate <- dataRepository.clearAndReplace(businessUrl, BusinessDataUtils.businessDataKey, businessData)
                   _ = Logger("application").info(s"Business details update for custom user with code ${customUserData.userCode} was acknowledged: ${businessUpdate.wasAcknowledged()}. URL: $businessUrl")
@@ -81,10 +80,10 @@ class CreateCustomUserController @Inject()(cc: MessagesControllerComponents, dat
                         decoupledModel.isAgent,
                         decoupledModel.isSupportingAgent,
                         customUserUTR,
-                        decoupledModel.previousYearCrystallisationStatus,
-                        decoupledModel.previousYearITSAStatus,
-                        decoupledModel.currentYearITSAStatus,
-                        decoupledModel.nextYearITSAStatus)
+                        decoupledModel.itsaStatus.cyMinusOneCrystallisationStatus,
+                        decoupledModel.itsaStatus.cyMinusOneItsaStatus,
+                        decoupledModel.itsaStatus.cyItsaStatus,
+                        decoupledModel.itsaStatus.cyPlusOneItsaStatus)
                       Created(Json.toJson(response))
                     case _ =>
                       logger.error(s"Failed to create custom user with code ${customUserData.userCode}")

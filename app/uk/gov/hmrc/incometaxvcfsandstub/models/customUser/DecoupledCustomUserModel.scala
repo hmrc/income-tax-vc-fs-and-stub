@@ -18,15 +18,39 @@ package uk.gov.hmrc.incometaxvcfsandstub.models.customUser
 
 import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.UserType.Individual
 
-case class DecoupledCustomUserModel(userType: UserType,
-                                    numberOfSoleTraders: Int,
-                                    activeUkProperty: Boolean,
-                                    activeForeignProperty: Boolean,
-                                    previousYearCrystallisationStatus: String,
-                                    previousYearITSAStatus: String,
-                                    currentYearITSAStatus: String,
-                                    nextYearITSAStatus: String) {
-  def isAgent: Boolean = userType != Individual
-  def isSupportingAgent: Boolean = userType == UserType.SupportingAgent
+case class DecoupledCustomUserModel(agentType: UserType,
+                                    incomeSources: DecoupledIncomeSources,
+                                    itsaStatus: DecoupledItsaStatus,
+                                    obligations: DecoupledObligations
+                                   ) {
+  
+  def isAgent: Boolean = agentType != Individual
+  def isSupportingAgent: Boolean = agentType == UserType.SupportingAgent
 }
+
+case class DecoupledIncomeSources(
+                                    userChannel: String,
+                                    activeSoleTrader: Boolean,
+                                    latentSoleTrader: Boolean,
+                                    ceasedSoleTrader: Boolean,
+                                    activeUkProperty: Boolean,
+                                    ceasedUkProperty: Boolean,
+                                    activeForeignProperty: Boolean,
+                                    ceasedForeignProperty: Boolean
+                                  )
+
+case class DecoupledItsaStatus(
+                                  cyMinusOneCrystallisationStatus: String,
+                                  cyMinusOneItsaStatus: String,
+                                  cyItsaStatus: String,
+                                  cyPlusOneItsaStatus: String
+                                )
+
+case class DecoupledObligations(
+                                   annualObligation: String,
+                                   quarterlyUpdate1: String,
+                                   quarterlyUpdate2: String,
+                                   quarterlyUpdate3: String,
+                                   quarterlyUpdate4: String
+                                 )
 

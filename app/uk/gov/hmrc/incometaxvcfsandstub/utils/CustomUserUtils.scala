@@ -16,63 +16,120 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.utils
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.{DecoupledCustomUserModel, UserType}
+import uk.gov.hmrc.incometaxvcfsandstub.models.customUser._
+import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.UserType._
 
 object CustomUserUtils {
-  
+
   val userNino = "CR000000A"
-  
+
   def translateCode(userCode: String): DecoupledCustomUserModel = {
-    val codeParts = userCode.split("-")
-    
-    val userType = UserType.userTypeFromCode(codeParts(0))
-    val numberOfSoleTraders = codeParts(1).substring(1).toInt
-    val activeUkProperty = codeParts(2).substring(1) match {
-      case "1" => true
-      case "0" => false
-      case _ => throw new IllegalArgumentException(s"Invalid active UK property code: ${codeParts(2)}")
-    }
-    val activeForeignProperty = codeParts(3).substring(1) match {
-      case "1" => true
-      case "0" => false
-      case _ => throw new IllegalArgumentException(s"Invalid active foreign property code: ${codeParts(3)}")
-    }
-    val previousYearCrystallisationStatus = previousYearCrystallisationStatusFromCode(codeParts(4))
-    val previousYearITSAStatus = itsaStatusFromCode(codeParts(5).substring(2))
-    val currentYearITSAStatus = itsaStatusFromCode(codeParts(6).substring(2))
-    val nextYearITSAStatus = itsaStatusFromCode(codeParts(7).substring(2))
-    
+
+    val parts = userCode.split('|').toList
+
+    val userType      = decodeUserType(parts(0))
+    val userChannel   = decodeUserChannel(parts(1))
+    val soleTrader    = decodeSoleTrader(parts(2))
+    val ukProperty    = decodeUkProperty(parts(3))
+    val foreignProp   = decodeForeignProperty(parts(4))
+    val itsaStatus    = decodeItsaStatus(parts(5))
+    val obligations   = decodeObligations(parts(6))
+
     DecoupledCustomUserModel(
-      userType,
-      numberOfSoleTraders,
-      activeUkProperty,
-      activeForeignProperty,
-      previousYearCrystallisationStatus.toString,
-      previousYearITSAStatus,
-      currentYearITSAStatus,
-      nextYearITSAStatus
+      agentType = userType,
+      incomeSources = DecoupledIncomeSources(
+        userChannel           = userChannel,
+        activeSoleTrader      = soleTrader.contains('A'),
+        latentSoleTrader      = soleTrader.contains('L'),
+        ceasedSoleTrader      = soleTrader.contains('C'),
+        activeUkProperty      = ukProperty.contains('A'),
+        ceasedUkProperty      = ukProperty.contains('C'),
+        activeForeignProperty = foreignProp.contains('A'),
+        ceasedForeignProperty = foreignProp.contains('C')
+      ),
+      itsaStatus = itsaStatus,
+      obligations = obligations
     )
   }
 
-  private def itsaStatusFromCode(code: String): String = {
+  private def decodeUserType(code: String): UserType =
     code match {
-      case "1" => "Annual"
-      case "2" => "MTD Voluntary"
-      case "3" => "MTD Mandated"
-      case "4" => "MTD Exempt"
-      case "5" => "Digitally Exempt"
-      case "6" => "No Status"
-      case "7" => "Dormant"
-      case _ => throw new IllegalArgumentException(s"Invalid ITSA status code: $code")
+      case "U1" => Individual
+      case "U2" => PrimaryAgent
+      case "U3" => SupportingAgent
+      case _    => invalid("user type", code)
+    }
+
+  private def decodeUserChannel(code: String): String =
+    code match {
+      case "UC1" => "customer-led"
+      case "UC2" => "hmrc-led-unconfirmed"
+      case "UC3" => "hmrc-led-confirmed"
+      case _     => invalid("user channel", code)
+    }
+
+  private def decodeSoleTrader(segment: String): Set[Char] = decodeFlags(segment, "ST")
+  private def decodeUkProperty(segment: String): Set[Char] = decodeFlags(segment, "P")
+  private def decodeForeignProperty(segment: String): Set[Char] = decodeFlags(segment, "F")
+
+  private def decodeFlags(segment: String, prefix: String): Set[Char] = {
+    segment match {
+      case s if s.startsWith(s"$prefix:") =>
+        s.drop(prefix.length + 1) match {
+          case "-" => Set.empty
+          case v   => v.toSet
+        }
+      case _ => invalid(s"$prefix flags", segment)
     }
   }
 
-  private def previousYearCrystallisationStatusFromCode(code: String): String = {
-    code match {
-      case "PYF1" => "Crystallised"
-      case "PYF2" => "NonCrystallised"
-      case _ => throw new IllegalArgumentException(s"Invalid crystallisation status code: $code")
-    }
+  private def decodeItsaStatus(segment: String): DecoupledItsaStatus = {
+    val parts = segment.stripPrefix("ITSA:").split("-")
+
+    DecoupledItsaStatus(
+      cyMinusOneCrystallisationStatus = parts(0) match {
+        case "CR" => "Crystallised"
+        case "NC" => "NonCrystallised"
+        case _    => invalid("crystallisation status", parts(0))
+      },
+      cyMinusOneItsaStatus = itsaFromCode(parts(1)),
+      cyItsaStatus         = itsaFromCode(parts(2)),
+      cyPlusOneItsaStatus  = itsaFromCode(parts(3))
+    )
   }
 
+  private def itsaFromCode(code: String): String =
+    code match {
+      case "0"  => "No Status"
+      case "1"  => "MTD Mandated"
+      case "2"  => "MTD Voluntary"
+      case "3"  => "Annual"
+      case "4"  => "Digitally Exempt"
+      case "5"  => "Dormant"
+      case "99" => "MTD Exempt"
+      case _    => invalid("ITSA status", code)
+    }
+
+  private def decodeObligations(segment: String): DecoupledObligations = {
+    val codes = segment.stripPrefix("OB:").split("-")
+
+    DecoupledObligations(
+      annualObligation  = obligationFromCode(codes(0)),
+      quarterlyUpdate1  = obligationFromCode(codes(1)),
+      quarterlyUpdate2  = obligationFromCode(codes(2)),
+      quarterlyUpdate3  = obligationFromCode(codes(3)),
+      quarterlyUpdate4  = obligationFromCode(codes(4))
+    )
+  }
+
+  private def obligationFromCode(code: String): String =
+    code match {
+      case "O" => "Open"
+      case "F" => "Fulfilled"
+      case "N" => "None"
+      case _   => invalid("obligation", code)
+    }
+
+  private def invalid(context: String, value: String): Nothing =
+    throw new IllegalArgumentException(s"Invalid $context code: $value")
 }
