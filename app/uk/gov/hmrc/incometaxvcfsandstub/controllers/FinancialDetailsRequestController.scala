@@ -76,7 +76,7 @@ class FinancialDetailsRequestController @Inject() (
   def overrideEffectiveDateOfPayment(): Action[AnyContent] =
     Action.async { implicit request =>
       val url =
-        "/etmp/RESTAdapter/itsa/taxpayer/financial-details?calculateAccruedInterest=true&customerPaymentInformation=true&dateFrom=2019-04-06&dateTo=2020-04-05&idNumber=AA888888A&idType=NINO&includeLocks=true&includeStatistical=false&onlyOpenItems=false&regimeType=ITSA&removePaymentonAccount=false"
+        "/etmp/RESTAdapter/itsa/taxpayer/financial-details?calculateAccruedInterest=true&customerPaymentInformation=true&dateFrom=2025-04-06&dateTo=2026-04-05&idNumber=OP000001A&idType=NINO&includeLocks=true&includeStatistical=false&onlyOpenItems=false&regimeType=ITSA&removePaymentonAccount=false"
 
       for {
         oldFinancialDetailsRecord <- dataRepository.find(equal("_id", url))
