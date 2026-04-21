@@ -16,15 +16,15 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
-import io.circe._
+import io.circe.*
 import org.apache.pekko.actor.ActorSystem
-import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.model.Filters.*
 import play.api.libs.json.JsValue
-import play.api.mvc._
+import play.api.mvc.*
 import play.api.{Configuration, Logging}
-import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod._
+import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.*
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
-import uk.gov.hmrc.incometaxvcfsandstub.utils.AddDelays
+import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, FinancialDetailsUtils}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import java.net.URI
@@ -34,14 +34,18 @@ import javax.inject.Inject
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
 
-class FinancialDetailsRequestController @Inject()(cc: MessagesControllerComponents,
-                                                  dataRepository: DataRepository,
-                                                  defaultValues: DefaultValues,
-                                                  requestHandlerController: RequestHandlerController)
-                                                 (implicit val ec: ExecutionContext,
-                                                  val actorSystem: ActorSystem,
-                                                  val configuration: Configuration
-                                                 ) extends FrontendController(cc) with Logging with AddDelays {
+class FinancialDetailsRequestController @Inject() (
+    cc:                       MessagesControllerComponents,
+    dataRepository:           DataRepository,
+    defaultValues:            DefaultValues,
+    requestHandlerController: RequestHandlerController
+  )(
+    implicit val ec:   ExecutionContext,
+    val actorSystem:   ActorSystem,
+    val configuration: Configuration)
+    extends FrontendController(cc)
+    with Logging
+    with AddDelays {
 
   private def addSuffixToRequest(
       key:    String,
@@ -69,13 +73,36 @@ class FinancialDetailsRequestController @Inject()(cc: MessagesControllerComponen
       }
     }
 
+  def overrideEffectiveDateOfPayment(): Action[AnyContent] =
+    Action.async { implicit request =>
+      val url =
+        "/etmp/RESTAdapter/itsa/taxpayer/financial-details?calculateAccruedInterest=true&customerPaymentInformation=true&dateFrom=2019-04-06&dateTo=2020-04-05&idNumber=AA888888A&idType=NINO&includeLocks=true&includeStatistical=false&onlyOpenItems=false&regimeType=ITSA&removePaymentonAccount=false"
+
+      for {
+        oldFinancialDetailsRecord <- dataRepository.find(equal("_id", url))
+        financialDetailsUpdate <- dataRepository.replaceOne(
+          url,
+          FinancialDetailsUtils.updateEffectiveDateOfPayment(oldFinancialDetailsRecord).get
+        )
+      } yield {
+        if (financialDetailsUpdate.wasAcknowledged()) {
+          logger.info("Successfully updated financial details")
+          Ok("Success")
+        } else {
+          logger.warn("Failed to update financial details")
+          InternalServerError("Failed to update financial details")
+        }
+      }
+    }
   def callIndividualYears(nino: String)(implicit request: WrappedRequest[AnyContent]): Future[Result] = {
     val fromDate = request.getQueryString("dateFrom").get
     val toDate   = request.getQueryString("dateTo").get
     val from     = LocalDate.parse(fromDate)
     val to       = LocalDate.parse(toDate)
 
-    logger.info(s"RequestHandlerController-URI: ${request.uri} - ${fromDate} - ${toDate} - ${to.getYear - from.getYear}")
+    logger.info(
+      s"RequestHandlerController-URI: ${request.uri} - ${fromDate} - ${toDate} - ${to.getYear - from.getYear}"
+    )
 
     // Return error if requesting a range of more than 5 tax years
     if (to.getYear - from.getYear > 5) {
@@ -118,14 +145,13 @@ class FinancialDetailsRequestController @Inject()(cc: MessagesControllerComponen
             }
           }
         }.flatten
-      }
-      else {
+      } else {
         dataRepository.find(equal("_id", request.uri), equal("method", GET)).map { stubData =>
           if (stubData.nonEmpty) {
             if (stubData.head.response.isEmpty) {
               Status(stubData.head.status)
             } else {
-             Status(stubData.head.status)(stubData.head.response.get)
+              Status(stubData.head.status)(stubData.head.response.get)
             }
           } else {
             val url = s"/enterprise/02.00.00/financial-data/NINO/$nino/ITSA"
