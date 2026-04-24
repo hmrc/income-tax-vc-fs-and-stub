@@ -27,31 +27,41 @@ class RepaymentDataUtilsSpec extends TestSupport {
 
   private val today = LocalDate.now().toString
 
-  private def makeDataModel(repaymentsJson: JsObject): DataModel =
+
+  private def makeDesDataModel(entries: Seq[JsObject]): DataModel =
     DataModel(
       _id = "/income-tax/self-assessment/repayments-viewer/AY888881A",
       schemaId = "testID1",
       method = "GET",
       status = Status.OK,
-      response = Some(repaymentsJson)
+      response = Some(Json.obj(
+        "repaymentsViewerDetails" -> JsArray(entries)
+      ))
+    )
+
+  private def makeHipDataModel(entries: Seq[JsObject]): DataModel =
+    DataModel(
+      _id = "/etmp/RESTAdapter/ITSA/RepaymentsViewer/AY888881A",
+      schemaId = "testID1",
+      method = "GET",
+      status = Status.OK,
+      response = Some(Json.obj(
+        "etmp_Response_Details" -> Json.obj(
+          "repaymentsViewerDetails" -> JsArray(entries)
+        )
+      ))
     )
 
   private def repaymentEntry(estimatedDate: String): JsObject = Json.obj(
-    "repaymentId"             -> "REPAY001",
-    "estimatedRepaymentDate"  -> estimatedDate,
-    "amount"                  -> 100
-  )
-
-  private def responseWithEntries(entries: Seq[JsObject]): JsObject = Json.obj(
-    "repaymentsViewerDetails" -> JsArray(entries)
+    "repaymentId"            -> "REPAY001",
+    "estimatedRepaymentDate" -> estimatedDate,
+    "amount"                 -> 100
   )
 
   "updateEstimatedRepaymentDate" should {
 
     "update the estimatedRepaymentDate of the first entry by default (index 0)" in {
-      val original = makeDataModel(responseWithEntries(Seq(repaymentEntry("2025-01-01"))))
-
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(original))
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(makeDesDataModel(Seq(repaymentEntry("2025-01-01")))))
 
       result shouldBe defined
       val entries = (result.get.response.get \ "repaymentsViewerDetails").as[JsArray].value
@@ -59,11 +69,11 @@ class RepaymentDataUtilsSpec extends TestSupport {
     }
 
     "update only the entry at the specified index, leaving others unchanged" in {
-      val original = makeDataModel(responseWithEntries(Seq(
+      val original = makeDesDataModel(Seq(
         repaymentEntry("2025-01-01"),
         repaymentEntry("2025-02-01"),
         repaymentEntry("2025-03-01")
-      )))
+      ))
 
       val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(original), index = 1)
 
@@ -75,9 +85,7 @@ class RepaymentDataUtilsSpec extends TestSupport {
     }
 
     "preserve all other fields on the updated entry" in {
-      val original = makeDataModel(responseWithEntries(Seq(repaymentEntry("2025-01-01"))))
-
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(original))
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(makeDesDataModel(Seq(repaymentEntry("2025-01-01")))))
 
       result shouldBe defined
       val entry = (result.get.response.get \ "repaymentsViewerDetails").as[JsArray].value.head.as[JsObject]
@@ -86,42 +94,74 @@ class RepaymentDataUtilsSpec extends TestSupport {
     }
 
     "return None when the input record is None" in {
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(None)
-
-      result shouldBe None
+      RepaymentDataUtils.updateEstimatedRepaymentDate(None) shouldBe None
     }
 
     "return None when the record has no response" in {
-      val record = DataModel(
-        _id = "/income-tax/self-assessment/repayments-viewer/AY888881A",
-        schemaId = "testID1",
-        method = "GET",
-        status = Status.OK,
-        response = None
-      )
-
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(record))
-
-      result shouldBe None
+      val record = DataModel(_id = "some-id", schemaId = "testID1", method = "GET", status = Status.OK, response = None)
+      RepaymentDataUtils.updateEstimatedRepaymentDate(Some(record)) shouldBe None
     }
 
     "return None when the response does not contain repaymentsViewerDetails" in {
-      val record = makeDataModel(Json.obj("someOtherField" -> "value"))
-
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(record))
-
-      result shouldBe None
+      val record = DataModel(_id = "some-id", schemaId = "testID1", method = "GET", status = Status.OK, response = Some(Json.obj("someOtherField" -> "value")))
+      RepaymentDataUtils.updateEstimatedRepaymentDate(Some(record)) shouldBe None
     }
+  }
 
-    "handle a single-entry list correctly" in {
-      val original = makeDataModel(responseWithEntries(Seq(repaymentEntry("2024-06-15"))))
+  "updateEstimatedRepaymentDateHip" should {
 
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(original), index = 0)
+    "update the estimatedRepaymentDate of the first entry by default (index 0)" in {
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(makeHipDataModel(Seq(repaymentEntry("2025-01-01")))))
 
       result shouldBe defined
-      val entries = (result.get.response.get \ "repaymentsViewerDetails").as[JsArray].value
-      entries.size shouldBe 1
+      val entries = (result.get.response.get \ "etmp_Response_Details" \ "repaymentsViewerDetails").as[JsArray].value
       (entries(0) \ "estimatedRepaymentDate").as[String] shouldBe today
+    }
+
+    "update only the entry at the specified index, leaving others unchanged" in {
+      val original = makeHipDataModel(Seq(
+        repaymentEntry("2025-01-01"),
+        repaymentEntry("2025-02-01"),
+        repaymentEntry("2025-03-01")
+      ))
+
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(original), index = 1)
+
+      result shouldBe defined
+      val entries = (result.get.response.get \ "etmp_Response_Details" \ "repaymentsViewerDetails").as[JsArray].value
+      (entries(0) \ "estimatedRepaymentDate").as[String] shouldBe "2025-01-01"
+      (entries(1) \ "estimatedRepaymentDate").as[String] shouldBe today
+      (entries(2) \ "estimatedRepaymentDate").as[String] shouldBe "2025-03-01"
+    }
+
+    "preserve all other fields on the updated entry" in {
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(makeHipDataModel(Seq(repaymentEntry("2025-01-01")))))
+
+      result shouldBe defined
+      val entry = (result.get.response.get \ "etmp_Response_Details" \ "repaymentsViewerDetails").as[JsArray].value.head.as[JsObject]
+      (entry \ "repaymentId").as[String] shouldBe "REPAY001"
+      (entry \ "amount").as[Int] shouldBe 100
+    }
+
+    "return None when the input record is None" in {
+      RepaymentDataUtils.updateEstimatedRepaymentDateHip(None) shouldBe None
+    }
+
+    "return None when the record has no response" in {
+      val record = DataModel(_id = "some-id", schemaId = "testID1", method = "GET", status = Status.OK, response = None)
+      RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(record)) shouldBe None
+    }
+
+    "return None when the response does not contain etmp_Response_Details" in {
+      val record = DataModel(_id = "some-id", schemaId = "testID1", method = "GET", status = Status.OK, response = Some(Json.obj("someOtherField" -> "value")))
+      RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(record)) shouldBe None
+    }
+
+    "return None when etmp_Response_Details does not contain repaymentsViewerDetails" in {
+      val record = DataModel(_id = "some-id", schemaId = "testID1", method = "GET", status = Status.OK, response = Some(Json.obj(
+        "etmp_Response_Details" -> Json.obj("someOtherField" -> "value")
+      )))
+      RepaymentDataUtils.updateEstimatedRepaymentDateHip(Some(record)) shouldBe None
     }
   }
 }

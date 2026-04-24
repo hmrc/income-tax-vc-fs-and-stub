@@ -16,9 +16,10 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.when
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
+import org.mongodb.scala.model.Filters
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.{JsArray, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
@@ -33,28 +34,50 @@ class RepaymentsRequestControllerSpec extends TestSupport with MockDataRepositor
 
   val TestRepaymentsRequestController = new RepaymentsRequestController(mockCC, mockDataRepository)
 
-  val record = DataModel(
-    _id = "/income-tax/self-assessment/repayments-viewer/AY888881A",
+  private val desUrl = "/income-tax/self-assessment/repayments-viewer/AY888881A"
+  private val hipUrl = "/etmp/RESTAdapter/ITSA/RepaymentsViewer/AY888881A"
+
+  val desRecord = DataModel(
+    _id = desUrl,
     schemaId = "testID1",
     method = "GET",
     status = OK,
     response = Some(Json.obj(
       "repaymentsViewerDetails" -> JsArray(Seq(
         Json.obj(
-          "repaymentId"            -> "REPAY001",
+          "repaymentId" -> "REPAY001",
           "estimatedRepaymentDate" -> "2025-01-01",
-          "amount"                 -> 100
+          "amount" -> 100
         )
       ))
     ))
   )
 
+  val hipRecord = DataModel(
+    _id = hipUrl,
+    schemaId = "testID2",
+    method = "GET",
+    status = OK,
+    response = Some(Json.obj(
+      "etmp_Response_Details" -> Json.obj(
+        "repaymentsViewerDetails" -> JsArray(Seq(
+          Json.obj(
+            "repaymentId" -> "REPAY002",
+            "estimatedRepaymentDate" -> "2025-01-01",
+            "amount" -> 200
+          )
+        ))
+      )
+    ))
+  )
+
   "overrideEstimatedRepaymentDate" should {
     "return status OK" when {
-      "the repayments data is successfully updated" in {
+      "both DES and HIP repayments data are successfully updated" in {
         lazy val request = FakeRequest()
-        when(mockDataRepository.find(any())).thenReturn(Future.successful(Some(record)))
-        when(mockDataRepository.replaceOne(any(), any())).thenReturn(Future.successful(successUpdateResult))
+        mockFindSequential(Some(desRecord), Some(hipRecord))
+        when(mockDataRepository.replaceOne(eqTo(desUrl), any())).thenReturn(Future.successful(successUpdateResult))
+        when(mockDataRepository.replaceOne(eqTo(hipUrl), any())).thenReturn(Future.successful(successUpdateResult))
 
         val result = TestRepaymentsRequestController.overrideEstimatedRepaymentDate()(request)
 
@@ -64,10 +87,35 @@ class RepaymentsRequestControllerSpec extends TestSupport with MockDataRepositor
     }
 
     "return status InternalServerError" when {
-      "the repository update is not acknowledged" in {
+      "the DES repository update is not acknowledged" in {
         lazy val request = FakeRequest()
-        when(mockDataRepository.find(any())).thenReturn(Future.successful(Some(record)))
-        when(mockDataRepository.replaceOne(any(), any())).thenReturn(Future.successful(failedUpdateResult))
+        mockFindSequential(Some(desRecord), Some(hipRecord))
+        when(mockDataRepository.replaceOne(eqTo(desUrl), any())).thenReturn(Future.successful(failedUpdateResult))
+        when(mockDataRepository.replaceOne(eqTo(hipUrl), any())).thenReturn(Future.successful(successUpdateResult))
+
+        val result = TestRepaymentsRequestController.overrideEstimatedRepaymentDate()(request)
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        contentAsString(result) shouldBe "Failed to update repayments"
+      }
+
+      "the HIP repository update is not acknowledged" in {
+        lazy val request = FakeRequest()
+        mockFindSequential(Some(desRecord), Some(hipRecord))
+        when(mockDataRepository.replaceOne(eqTo(desUrl), any())).thenReturn(Future.successful(successUpdateResult))
+        when(mockDataRepository.replaceOne(eqTo(hipUrl), any())).thenReturn(Future.successful(failedUpdateResult))
+
+        val result = TestRepaymentsRequestController.overrideEstimatedRepaymentDate()(request)
+
+        status(result) shouldBe INTERNAL_SERVER_ERROR
+        contentAsString(result) shouldBe "Failed to update repayments"
+      }
+
+      "both DES and HIP repository updates are not acknowledged" in {
+        lazy val request = FakeRequest()
+        mockFindSequential(Some(desRecord), Some(hipRecord))
+        when(mockDataRepository.replaceOne(eqTo(desUrl), any())).thenReturn(Future.successful(failedUpdateResult))
+        when(mockDataRepository.replaceOne(eqTo(hipUrl), any())).thenReturn(Future.successful(failedUpdateResult))
 
         val result = TestRepaymentsRequestController.overrideEstimatedRepaymentDate()(request)
 

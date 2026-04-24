@@ -22,23 +22,23 @@ import uk.gov.hmrc.incometaxvcfsandstub.models.DataModel
 import java.time.LocalDate
 
 object RepaymentDataUtils {
-  val repaymentsKeyHip = "response.etmp_Response_Details.repaymentsViewerDetails"
-  val repaymentsKeyDes = "response.repaymentsViewerDetails"
-
   private val todayValue = JsString(LocalDate.now().toString)
-
-  private val updateSingleDoc: Reads[JsObject] = __.json.update(
-    (__ \ "estimatedRepaymentDate").json.put(todayValue)
-  )
-
-  private val responseTransformer: Reads[JsObject] =
-    (__ \ "repaymentsViewerDetails").json.update(
-      Reads.list(updateSingleDoc).map(JsArray(_))
-    )
-
 
   private def updateByIndex(index: Int): Reads[JsObject] = {
     (__ \ "repaymentsViewerDetails").json.update(
+      Reads.list(__.json.pick).map { items =>
+        val updated = items.zipWithIndex.map {
+          case (item, i) if i == index =>
+            item.as[JsObject] + ("estimatedRepaymentDate" -> todayValue)
+          case (item, _) => item
+        }
+        JsArray(updated)
+      }
+    )
+  }
+
+  private def updateByIndexHip(index: Int): Reads[JsObject] = {
+    (__ \ "etmp_Response_Details" \ "repaymentsViewerDetails").json.update(
       Reads.list(__.json.pick).map { items =>
         val updated = items.zipWithIndex.map {
           case (item, i) if i == index =>
@@ -55,6 +55,14 @@ object RepaymentDataUtils {
       record <- oldRecord
       response <- record.response
       updatedResponse <- response.transform(updateByIndex(index)).asOpt
+    } yield record.copy(response = Some(updatedResponse))
+  }
+
+  def updateEstimatedRepaymentDateHip(oldRecord: Option[DataModel], index: Int = 0): Option[DataModel] = {
+    for {
+      record <- oldRecord
+      response <- record.response
+      updatedResponse <- response.transform(updateByIndexHip(index)).asOpt
     } yield record.copy(response = Some(updatedResponse))
   }
 }

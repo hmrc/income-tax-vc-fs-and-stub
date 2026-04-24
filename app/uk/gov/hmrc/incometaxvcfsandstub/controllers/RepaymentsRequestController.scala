@@ -34,18 +34,18 @@ class RepaymentsRequestController @Inject()(cc: MessagesControllerComponents,
                                             val configuration: Configuration)
   extends FrontendController(cc) with Logging with AddDelays {
 
-  private val overrideRepaymentsUrl: String = {
-    s"/income-tax/self-assessment/repayments-viewer/AY888881A"
-
-  }
+  private val overrideRepaymentsUrl: String = "/income-tax/self-assessment/repayments-viewer/AY888881A"
+  private val overrideRepaymentsUrlHip = "/etmp/RESTAdapter/ITSA/RepaymentsViewer/AY888881A"
 
   def overrideEstimatedRepaymentDate(): Action[AnyContent] =
     Action.async { implicit request =>
       for {
         oldRepaymentsData <- dataRepository.find(equal("_id", overrideRepaymentsUrl))
+        oldRepaymentsDataHip <- dataRepository.find(equal("_id", overrideRepaymentsUrlHip))
         repaymentsUpdate <- dataRepository.replaceOne(overrideRepaymentsUrl, RepaymentDataUtils.updateEstimatedRepaymentDate(oldRepaymentsData).get)
+        repaymentsUpdateHip <- dataRepository.replaceOne(overrideRepaymentsUrlHip, RepaymentDataUtils.updateEstimatedRepaymentDateHip(oldRepaymentsDataHip).get)
       } yield {
-        if (repaymentsUpdate.wasAcknowledged()) {
+        if (repaymentsUpdate.wasAcknowledged() && repaymentsUpdateHip.wasAcknowledged()) {
           logger.info("Successfully updated repayments details")
           Ok("Success")
         } else {
