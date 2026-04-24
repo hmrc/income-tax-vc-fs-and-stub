@@ -37,6 +37,11 @@ POST        /income-tax-view-change/override/obligations-data/:nino             
 # API #1553  => #5277 Hip migration
 GET         /etmp/RESTAdapter/itsa/taxpayer/financial-details             uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.transform()
 
+
+#Override of effectiveDateOfPayment for recent activity tab on home page.
++nocsrf
+POST         /income-tax-view-change/override/effectiveDateOfPayment    uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.overrideEffectiveDateOfPayment()
+
 # API #1885 => #5294 Hip migration
 GET         /itsa/income-tax/v1/$taxYearRange<[0-9]{2}-[0-9]{2}>/view/calculations/liability/:nino/:calculationId        uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.getCalculationDetailsHip(nino: String, calculationId: String, taxYearRange: String)
 
