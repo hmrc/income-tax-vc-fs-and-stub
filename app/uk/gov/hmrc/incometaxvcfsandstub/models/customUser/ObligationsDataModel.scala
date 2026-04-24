@@ -16,14 +16,8 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.models.customUser
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.UserType.Individual
+import org.mongodb.scala.bson.collection.immutable.Document
 
-case class DecoupledCustomUserModel(agentType: UserType,
-                                    incomeSources: DecoupledIncomeSources,
-                                    itsaStatus: DecoupledItsaStatus,
-                                    obligations: DecoupledObligations
-                                   ) {
-  
-  def isAgent: Boolean = agentType != Individual
-  def isSupportingAgent: Boolean = agentType == UserType.SupportingAgent
-}
+case class ObligationsDataModel(datedData: Seq[Document],
+                                openObligationsData: Seq[Document],
+                                fulfilledObligationsData: Seq[Document])

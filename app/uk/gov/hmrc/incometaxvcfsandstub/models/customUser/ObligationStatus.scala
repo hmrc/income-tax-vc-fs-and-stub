@@ -16,14 +16,13 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.models.customUser
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.UserType.Individual
+enum ObligationStatus(val apiValue: String) {
+  case Open extends ObligationStatus("O")
+  case Fulfilled extends ObligationStatus("F")
 
-case class DecoupledCustomUserModel(agentType: UserType,
-                                    incomeSources: DecoupledIncomeSources,
-                                    itsaStatus: DecoupledItsaStatus,
-                                    obligations: DecoupledObligations
-                                   ) {
-  
-  def isAgent: Boolean = agentType != Individual
-  def isSupportingAgent: Boolean = agentType == UserType.SupportingAgent
+  def isFulfilled: Boolean = this == Fulfilled
+}
+
+object ObligationStatus {
+  def getApiValue(status: ObligationStatus): String = status.apiValue
 }

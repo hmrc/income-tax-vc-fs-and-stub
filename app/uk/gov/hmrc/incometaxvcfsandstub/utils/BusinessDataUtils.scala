@@ -24,14 +24,31 @@ object BusinessDataUtils {
 
   final val businessDataKey = "response.success.taxPayerDisplayResponse.businessData"
   final val propertyDataKey = "response.success.taxPayerDisplayResponse.propertyData"
+  final val channelKey = "response.success.taxPayerDisplayResponse.channel"
   private val currentYear: Int = LocalDate.now().getYear
+  private val currentTaxYear = if(LocalDate.now().isBefore(LocalDate.of(currentYear, 4, 6))) currentYear - 1 else currentYear
 
-  def createBusinessData(activeSoleTrader: Boolean, ceasedSoleTrader: Boolean): Seq[Document] = {
+  def createBusinessData(activeSoleTrader: Boolean, ceasedSoleTrader: Boolean, latentSoleTrader: Boolean = false): Seq[Document] = {
 
-    def businessDocument(isCeased: Boolean, index: Int): Document = {
+    def businessDocument(isCeased: Boolean, index: Int, isLatentBusiness: Boolean): Document = {
       val cessation: Option[(String, String)] = if (isCeased) Some("cessationDate" -> s"${currentYear - 1}-06-30") else None
+
+      val businessInLatency = if(isLatentBusiness) {
+        Document(
+          "latencyDetails" -> Document(
+            "latencyEndDate" -> s"${currentTaxYear + 1}-12-31",
+            "taxYear1" -> currentTaxYear.toString,
+            "latencyIndicator1" -> "A",
+            "taxYear2" -> (currentTaxYear + 1).toString,
+            "latencyIndicator2" -> "A"
+          )
+        )
+      } else {
+        Document.empty
+      }
+
       val base = Document(
-        "incomeSourceId" -> s"XAIS0000000000$index",
+        "incomeSourceId" -> s"XAIT2000000000$index",
         "accPeriodSDate" -> s"$currentYear-04-01",
         "accPeriodEDate" -> s"${currentYear + 1}-03-31",
         "tradingName" -> s"Business $index",
@@ -44,23 +61,29 @@ object BusinessDataUtils {
           "postalCode" -> s"AA$index AAA",
           "countryCode" -> "GB"
         ),
-        "tradingSDate" -> "2013-01-01",
+        "tradingSDate" -> s"${currentYear - 3}-01-01",
         "seasonalFlag" -> false,
         "paperLessFlag" -> true,
-        "firstAccountingPeriodStartDate" -> "2017-04-01",
-        "firstAccountingPeriodEndDate" -> "2018-03-31"
+        "firstAccountingPeriodStartDate" -> s"${currentYear - 3}-04-01",
+        "firstAccountingPeriodEndDate" -> s"${currentYear - 2}-03-31"
       )
 
-      cessation.fold(base) { kv =>
-        base ++ Document(kv)
+      (cessation, businessInLatency.isEmpty) match {
+        case (Some(cessationData), true) => base ++ Document(cessationData)
+        case (None, false) => base ++ businessInLatency
+        case (_, _) => base
       }
     }
 
-    (activeSoleTrader, ceasedSoleTrader) match {
-      case (false, false) => Seq.empty
-      case (true, false)  => Seq(businessDocument(isCeased = false, index = 1))
-      case (false, true)  => Seq(businessDocument(isCeased = true, index = 2))
-      case (true, true)   => Seq(businessDocument(isCeased = false, index = 1), businessDocument(isCeased = true, index = 2))
+    (activeSoleTrader, ceasedSoleTrader, latentSoleTrader) match {
+      case (false, false, false) => Seq.empty
+      case (true, false, false)  => Seq(businessDocument(isCeased = false, index = 1, isLatentBusiness = false))
+      case (false, true, false)  => Seq(businessDocument(isCeased = true, index = 2, isLatentBusiness = false))
+      case (true, true, false)   => Seq(businessDocument(isCeased = false, index = 1, isLatentBusiness = false), businessDocument(isCeased = true, index = 2, isLatentBusiness = false))
+      case (false, false, true)  => Seq(businessDocument(isCeased = false, index = 3, isLatentBusiness = true))
+      case (true, false, true)   => Seq(businessDocument(isCeased = false, index = 1, isLatentBusiness = false), businessDocument(isCeased = false, index = 3, isLatentBusiness = true))
+      case (false, true, true)   => Seq(businessDocument(isCeased = false, index = 2, isLatentBusiness = false), businessDocument(isCeased = false, index = 3, isLatentBusiness = true))
+      case (true, true, true)    => Seq(businessDocument(isCeased = false, index = 1, isLatentBusiness = false), businessDocument(isCeased = true, index = 2, isLatentBusiness = false), businessDocument(isCeased = false, index = 3, isLatentBusiness = true))
     }
   }
 

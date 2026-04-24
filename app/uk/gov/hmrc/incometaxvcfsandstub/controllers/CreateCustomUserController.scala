@@ -17,13 +17,13 @@
 package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import com.google.inject.{Inject, Singleton}
+import play.api.Logging
 import play.api.libs.json.Json
-import play.api.{Logger, Logging}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.{CreateCustomUserModel, CustomUserResponse}
-import uk.gov.hmrc.incometaxvcfsandstub.models.{CrystallisationStatus, TaxYear}
+import uk.gov.hmrc.incometaxvcfsandstub.models.TaxYear
+import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.{CreateCustomUserModel, CustomUserResponse, UserChannel}
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.DataRepository
-import uk.gov.hmrc.incometaxvcfsandstub.utils.{BusinessDataUtils, CustomUserUtils}
+import uk.gov.hmrc.incometaxvcfsandstub.utils.{BusinessDataUtils, CustomUserUtils, ObligationsDataUtils}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,21 +35,10 @@ class CreateCustomUserController @Inject()(cc: MessagesControllerComponents, dat
   private final val customUserMtdid = "XTIT02468246824"
   private final val customUserUTR = "2468246824"
 
-  private final val itsaStatusDataKey = "response"
-
   private def overrideBusinessDetailsUrl(mtdid: String): String = s"/etmp/RESTAdapter/itsa/taxpayer/business-details?mtdReference=$mtdid"
-
-  private def createOverwriteCalculationListUrl(nino: String, taxYear: TaxYear): String = {
-    if (taxYear.endYear >= 2024) {
-      Logger("application").info(s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details TYS")
-      s"/itsa/income-tax/v1/${taxYear.rangeShort}/view/calculations/liability/$nino"
-    } else {
-      Logger("application").info(s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details legacy")
-      s"/income-tax/list-of-calculation-results/$nino?taxYear=${taxYear.endYearString}"
-    }
-  }
-
-  private def itsaStatusUrl = s"/itsd/person-itd/itsa-status/$customUserNino?taxYear=25-26&futureYears=true&history=false"
+  private def overrideOpenObligationsUrl: String = s"/enterprise/obligation-data/nino/CR000000A/ITSA?status=O"
+  private def overrideFulfilledObligationsUrl: String = s"/enterprise/obligation-data/nino/CR000000A/ITSA?status=F"
+  private def overrideDatedObligationsUrl: String = s"/enterprise/obligation-data/nino/CR000000A/ITSA?from=2026-04-06&to=2027-04-05"
 
   def createCustomUser(): Action[AnyContent] =
     Action.async { implicit request =>
@@ -63,17 +52,21 @@ class CreateCustomUserController @Inject()(cc: MessagesControllerComponents, dat
                 val businessUrl = overrideBusinessDetailsUrl(customUserMtdid)
 
                 val decoupledModel = CustomUserUtils.translateCode(customUserData.userCode)
-                
-                val businessData = BusinessDataUtils.createBusinessData(decoupledModel.incomeSources.activeSoleTrader, false)
+
+                val businessData = BusinessDataUtils.createBusinessData(decoupledModel.incomeSources.activeSoleTrader, decoupledModel.incomeSources.ceasedSoleTrader, decoupledModel.incomeSources.latentSoleTrader)
                 val propertyData = BusinessDataUtils.createPropertyData(decoupledModel.incomeSources.activeUkProperty, decoupledModel.incomeSources.activeForeignProperty)
+
+                val obligationsData = ObligationsDataUtils.createCustomUserObligationsData(decoupledModel.obligations)
                 for {
-                  businessUpdate <- dataRepository.clearAndReplace(businessUrl, BusinessDataUtils.businessDataKey, businessData)
-                  _ = Logger("application").info(s"Business details update for custom user with code ${customUserData.userCode} was acknowledged: ${businessUpdate.wasAcknowledged()}. URL: $businessUrl")
-                  propertyUpdate <- dataRepository.clearAndReplace(businessUrl, BusinessDataUtils.propertyDataKey, propertyData)
-                  _ = Logger("application").info(s"Property details update for custom user with code ${customUserData.userCode} was acknowledged: ${propertyUpdate.wasAcknowledged()}. URL: $businessUrl")
+                  businessUpdate             <- dataRepository.clearAndReplace(businessUrl, BusinessDataUtils.businessDataKey, businessData)
+                  propertyUpdate             <- dataRepository.clearAndReplace(businessUrl, BusinessDataUtils.propertyDataKey, propertyData)
+                  channelUpdate              <- dataRepository.clearAndReplaceField(businessUrl, BusinessDataUtils.channelKey, UserChannel.getApiValueForUserChannel(decoupledModel.incomeSources.userChannel))
+                  openObligationsUpdate      <- dataRepository.clearAndReplace(overrideOpenObligationsUrl, ObligationsDataUtils.obligationsDataKey, obligationsData.openObligationsData)
+                  fulfilledObligationsUpdate <- dataRepository.clearAndReplace(overrideFulfilledObligationsUrl, ObligationsDataUtils.obligationsDataKey, obligationsData.fulfilledObligationsData)
+                  datedObligationsUpdate     <- dataRepository.clearAndReplace(overrideDatedObligationsUrl, ObligationsDataUtils.obligationsDataKey, obligationsData.datedData)
                 } yield {
-                  (businessUpdate.wasAcknowledged(), propertyUpdate.wasAcknowledged()) match {
-                    case (true, true) =>
+                  (businessUpdate.wasAcknowledged(), propertyUpdate.wasAcknowledged(), openObligationsUpdate.wasAcknowledged(), channelUpdate.wasAcknowledged(), fulfilledObligationsUpdate.wasAcknowledged(), datedObligationsUpdate.wasAcknowledged()) match {
+                    case (true, true, true, true, true, true) =>
                       logger.info(s"Successfully created custom user with code ${customUserData.userCode}")
                       val response = CustomUserResponse(
                         customUserNino,

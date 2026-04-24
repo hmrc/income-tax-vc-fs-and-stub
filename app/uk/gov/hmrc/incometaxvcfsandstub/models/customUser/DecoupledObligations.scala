@@ -16,14 +16,10 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.models.customUser
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.customUser.UserType.Individual
-
-case class DecoupledCustomUserModel(agentType: UserType,
-                                    incomeSources: DecoupledIncomeSources,
-                                    itsaStatus: DecoupledItsaStatus,
-                                    obligations: DecoupledObligations
-                                   ) {
-  
-  def isAgent: Boolean = agentType != Individual
-  def isSupportingAgent: Boolean = agentType == UserType.SupportingAgent
-}
+case class DecoupledObligations(
+                                 annualObligation: Option[ObligationStatus],
+                                 quarterlyUpdate1: Option[ObligationStatus],
+                                 quarterlyUpdate2: Option[ObligationStatus],
+                                 quarterlyUpdate3: Option[ObligationStatus],
+                                 quarterlyUpdate4: Option[ObligationStatus]
+                               )

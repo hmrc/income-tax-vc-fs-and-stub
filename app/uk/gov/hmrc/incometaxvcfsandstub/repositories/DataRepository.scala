@@ -65,9 +65,22 @@ class DataRepository @Inject() (repository: DataRepositoryBase) {
     val bsonDocs: Seq[BsonDocument] = newArray.map(_.toBsonDocument)
     val updates = Updates.set(arrayField, bsonDocs)
 
-
     repository.collection
       .updateOne(filter, updates, UpdateOptions().upsert(true))
+      .toFuture()
+  }
+
+  def clearAndReplaceField(
+                            url: String,
+                            field: String,
+                            newValue: Any
+                          ): Future[UpdateResult] = {
+
+    val filter = Filters.equal("_id", url)
+    val update = Updates.set(field, newValue)
+
+    repository.collection
+      .updateOne(filter, update, UpdateOptions().upsert(true))
       .toFuture()
   }
 }

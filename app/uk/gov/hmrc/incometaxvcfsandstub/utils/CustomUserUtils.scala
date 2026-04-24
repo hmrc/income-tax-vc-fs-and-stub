@@ -27,7 +27,7 @@ object CustomUserUtils {
 
     val parts = userCode.split('|').toList
 
-    val userType      = decodeUserType(parts(0))
+    val userType      = decodeUserType(parts.head)
     val userChannel   = decodeUserChannel(parts(1))
     val soleTrader    = decodeSoleTrader(parts(2))
     val ukProperty    = decodeUkProperty(parts(3))
@@ -38,7 +38,7 @@ object CustomUserUtils {
     DecoupledCustomUserModel(
       agentType = userType,
       incomeSources = DecoupledIncomeSources(
-        userChannel           = userChannel,
+        userChannel           = UserChannel.fromString(userChannel),
         activeSoleTrader      = soleTrader.contains('A'),
         latentSoleTrader      = soleTrader.contains('L'),
         ceasedSoleTrader      = soleTrader.contains('C'),
@@ -122,11 +122,11 @@ object CustomUserUtils {
     )
   }
 
-  private def obligationFromCode(code: String): String =
+  private def obligationFromCode(code: String): Option[ObligationStatus] =
     code match {
-      case "O" => "Open"
-      case "F" => "Fulfilled"
-      case "N" => "None"
+      case "O" => Some(ObligationStatus.Open)
+      case "F" => Some(ObligationStatus.Fulfilled)
+      case "N" => None
       case _   => invalid("obligation", code)
     }
 
