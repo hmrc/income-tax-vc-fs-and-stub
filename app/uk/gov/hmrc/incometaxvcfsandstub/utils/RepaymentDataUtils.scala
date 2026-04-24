@@ -50,7 +50,7 @@ object RepaymentDataUtils {
     )
   }
 
-  def updateEstimatedRepaymentDate(oldRecord: Option[DataModel], index: Int = 0): Option[DataModel] = {
+  def updateEstimatedRepaymentDate(oldRecord: Option[DataModel], index: Int = 1): Option[DataModel] = {
     for {
       record <- oldRecord
       response <- record.response
