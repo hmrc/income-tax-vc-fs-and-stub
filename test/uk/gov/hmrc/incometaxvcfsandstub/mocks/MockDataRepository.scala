@@ -52,4 +52,12 @@ trait MockDataRepository extends TestSupport with MockitoSugar {
     when(mockDataRepository.find(ArgumentMatchers.any())).thenReturn(Future.successful(response))
   }
 
+  def mockFindSequential(responses: Option[DataModel]*): OngoingStubbing[Future[Option[DataModel]]] = {
+    val first = responses.head
+    val rest = responses.tail.map(r => Future.successful(r))
+    responses.tail.foldLeft(
+      when(mockDataRepository.find(ArgumentMatchers.any())).thenReturn(Future.successful(first))
+    )((stub, response) => stub.thenReturn(Future.successful(response)))
+  }
+
 }
