@@ -60,12 +60,12 @@ class RepaymentDataUtilsSpec extends TestSupport {
 
   "updateEstimatedRepaymentDate" should {
 
-    "update the estimatedRepaymentDate of the first entry by default (index 0)" in {
-      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(makeDesDataModel(Seq(repaymentEntry("2025-01-01")))))
+    "update the estimatedRepaymentDate of the second entry by default (index 1)" in {
+      val result = RepaymentDataUtils.updateEstimatedRepaymentDate(Some(makeDesDataModel(Seq(repaymentEntry("2025-01-01"), repaymentEntry("2025-02-02")))))
 
       result shouldBe defined
       val entries = (result.get.response.get \ "repaymentsViewerDetails").as[JsArray].value
-      (entries(0) \ "estimatedRepaymentDate").as[String] shouldBe today
+      (entries(1) \ "estimatedRepaymentDate").as[String] shouldBe today
     }
 
     "update only the entry at the specified index, leaving others unchanged" in {
