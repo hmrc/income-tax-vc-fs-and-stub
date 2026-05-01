@@ -225,17 +225,17 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
     }
   }
 
-  def createOverwriteCalculationListUrl(nino: String, taxYear: TaxYear): String = {
-    if (taxYear.endYear >= 2024) {
-      Logger("application").info(
-        s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details TYS"
-      )
-      s"/itsa/income-tax/v1/${taxYear.rangeShort}/view/calculations/liability/$nino"
-    } else {
-      Logger("application").info(
-        s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details legacy"
-      )
-      s"/income-tax/list-of-calculation-results/$nino?taxYear=${taxYear.endYearString}"
+  private def createOverwriteCalculationListUrl(nino: String, taxYear: TaxYear): String = {
+    taxYear match {
+      case taxYear if taxYear.endYear >= 2026 =>
+        Logger("application").info(s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details TYS - 2083")
+        s"/income-tax/${taxYear.rangeShort}/view/$nino/calculations-summary"
+      case taxYear if taxYear.endYear >= 2024 =>
+        Logger("application").info(s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details TYS - 5624")
+        s"/itsa/income-tax/v1/${taxYear.rangeShort}/view/calculations/liability/$nino"
+      case _ =>
+        Logger("application").info(s"[CalculationController][createOverwriteCalculationListUrl] Overwriting calculation details legacy")
+        s"/income-tax/list-of-calculation-results/$nino?taxYear=${taxYear.endYearString}"
     }
   }
 
