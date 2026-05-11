@@ -39,6 +39,8 @@ class ItsaStatusController @Inject()(cc: MessagesControllerComponents,
                                      val configuration: Configuration)
     extends FrontendController(cc) with Logging with AddDelays {
 
+  private final val cyPlusOneUser = "OP000004A"
+
   private def createOverwriteItsaStatusUrl(nino: String, taxYear: TaxYear): String = {
     s"/income-tax/$nino/person-itd/itsa-status/${taxYear.rangeShort}?futureYears=false&history=false"
   }
@@ -61,6 +63,8 @@ class ItsaStatusController @Inject()(cc: MessagesControllerComponents,
               Status(datamodel.status)(stubData.head.response.get)
             case Some(dataModel) =>
               Status(dataModel.status)
+            case _ if nino == cyPlusOneUser =>
+              Status(OK)(defaultValues.getHipItsaStatusDefaultJsonCyPlusOneUser(taxYearRange))
             case _ =>
               Status(OK)(defaultValues.getHipItsaStatusDefaultJson(taxYearRange))
           }
@@ -128,5 +132,4 @@ class ItsaStatusController @Inject()(cc: MessagesControllerComponents,
           Future.failed(ex)
       }
   }
-
 }
