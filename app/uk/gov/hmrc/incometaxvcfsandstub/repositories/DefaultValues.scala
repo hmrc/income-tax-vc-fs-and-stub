@@ -60,7 +60,7 @@ class DefaultValues @Inject() (
   }
 
   def getHipItsaStatusDefaultJson(taxYear: String): JsValue = {
-    Json.toJson(createItsaStatusJson(taxYear))
+    Json.toJson(createItsaStatusJson(taxYear) ++ createItsaStatusJson(getNextYear(taxYear)))
   }
 
   def getHipItsaStatusDefaultJsonCyPlusOneUser(taxYear: String): JsValue = {
@@ -103,6 +103,11 @@ class DefaultValues @Inject() (
         case None =>
           NotFound(s"Failed to find the default API endpoint in the repository matching the URI: $url")
       }
+  }
+
+  private def getNextYear(taxYear: String): String = {
+    val years = taxYear.split("-").map(_.toInt)
+    s"${years.head + 1}-${years.last + 1}"
   }
 
   private def createItsaStatusJson(taxYear: String) = {

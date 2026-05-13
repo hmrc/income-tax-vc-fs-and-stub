@@ -19,7 +19,7 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 import org.apache.pekko.actor.ActorSystem
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, MessagesRequest}
 import play.api.{Configuration, Logging}
-import uk.gov.hmrc.incometaxvcfsandstub.models.BusinessDetailsModel
+import uk.gov.hmrc.incometaxvcfsandstub.models.{BusinessDetailsModel, LatentBusinessModel}
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.DataRepository
 import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, BusinessDataUtils}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -75,7 +75,7 @@ class BusinessDetailsRequestController @Inject()(cc: MessagesControllerComponent
       }
     }
 
-  def overwriteBusinessData(mtdid: String): Action[AnyContent] =
+  def overwriteBusinessData(mtdid: String): Action[AnyContent] = {
     Action.async { implicit request =>
       request.body.asJson match {
         case None =>
@@ -89,7 +89,7 @@ class BusinessDetailsRequestController @Inject()(cc: MessagesControllerComponent
             valid = userModel => {
               val url = overrideBusinessDetailsUrl(mtdid)
 
-              val businessData  = BusinessDataUtils.createBusinessData(userModel.activeSoleTrader, userModel.ceasedBusiness)
+              val businessData = BusinessDataUtils.createBusinessData(userModel.activeSoleTrader, userModel.ceasedBusiness)
               val propertyData = BusinessDataUtils.createPropertyData(userModel.activeUkProperty, userModel.activeForeignProperty)
 
               for {
@@ -122,4 +122,57 @@ class BusinessDetailsRequestController @Inject()(cc: MessagesControllerComponent
           }
       }
     }
+  }
+
+  def overwriteLatentBusinessData(mtdid: String): Action[AnyContent] = {
+    Action.async { implicit request =>
+      request.body.asJson match {
+        case None =>
+          Future.successful(BadRequest("No JSON found - Expected JSON data"))
+
+        case Some(json) =>
+          json.validate[LatentBusinessModel].fold(
+            invalid = _ =>
+              Future.successful(BadRequest("Invalid JSON data")),
+
+            valid = userModel => {
+              val url = overrideBusinessDetailsUrl(mtdid)
+
+              val latencyIndicator1 = BusinessDataUtils.getLatencyLetter(userModel.latencyIndicator1)
+              val latencyIndicator2 = BusinessDataUtils.getLatencyLetter(userModel.latencyIndicator2)
+
+              val businessData = BusinessDataUtils.createLatentBusinessData(latencyIndicator1, latencyIndicator2)
+              val propertyData = BusinessDataUtils.createLatentPropertyData(latencyIndicator1, latencyIndicator2)
+
+              for {
+                businessUpdate <- dataRepository.clearAndReplace(url, BusinessDataUtils.businessDataKey, businessData)
+                propertyUpdate <- dataRepository.clearAndReplace(url, BusinessDataUtils.propertyDataKey, propertyData)
+              } yield {
+                (businessUpdate.wasAcknowledged(), propertyUpdate.wasAcknowledged()) match {
+                  case (true, true) =>
+                    logger.info("Successfully updated business details")
+                    Ok("Success")
+
+                  case (false, false) =>
+                    logger.warn("Failed to update both business and property details")
+                    InternalServerError("Failed to update business and property details")
+
+                  case (false, true) =>
+                    logger.warn("Failed to update business details")
+                    InternalServerError("Failed to update business details")
+
+                  case (true, false) =>
+                    logger.warn("Failed to update property details")
+                    InternalServerError("Failed to update property details")
+                }
+              }
+            }
+          ).recover {
+            case ex =>
+              logger.error("Unexpected error updating business data", ex)
+              InternalServerError(s"Unexpected error occurred")
+          }
+      }
+    }
+  }
 }

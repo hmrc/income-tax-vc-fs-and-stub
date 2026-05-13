@@ -30,6 +30,9 @@ GET         /etmp/RESTAdapter/itsa/taxpayer/business-details                    
 POST        /income-tax-view-change/override/business-data/:mtdid                     uk.gov.hmrc.incometaxvcfsandstub.controllers.BusinessDetailsRequestController.overwriteBusinessData(mtdid: String)
 
 +nocsrf
+POST        /income-tax-view-change/override/latent-business-data/:mtdid              uk.gov.hmrc.incometaxvcfsandstub.controllers.BusinessDetailsRequestController.overwriteLatentBusinessData(mtdid: String)
+
++nocsrf
 POST        /income-tax-view-change/override/obligations-data/:nino                     uk.gov.hmrc.incometaxvcfsandstub.controllers.ObligationsRequestController.overwriteObligationsData(nino: String)
 
 +nocsrf
