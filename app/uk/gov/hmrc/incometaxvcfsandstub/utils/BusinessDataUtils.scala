@@ -25,11 +25,13 @@ object BusinessDataUtils {
   final val businessDataKey = "response.success.taxPayerDisplayResponse.businessData"
   final val propertyDataKey = "response.success.taxPayerDisplayResponse.propertyData"
   private val currentYear: Int = LocalDate.now().getYear
+  private val currentTaxYear = if (LocalDate.now().isBefore(LocalDate.of(currentYear, 4, 6))) currentYear - 1 else currentYear
 
   def createBusinessData(activeSoleTrader: Boolean, ceasedSoleTrader: Boolean): Seq[Document] = {
 
     def businessDocument(isCeased: Boolean, index: Int): Document = {
       val cessation: Option[(String, String)] = if (isCeased) Some("cessationDate" -> s"${currentYear - 1}-06-30") else None
+
       val base = Document(
         "incomeSourceId" -> s"XAIS0000000000$index",
         "accPeriodSDate" -> s"$currentYear-04-01",
@@ -48,7 +50,11 @@ object BusinessDataUtils {
         "seasonalFlag" -> false,
         "paperLessFlag" -> true,
         "firstAccountingPeriodStartDate" -> "2017-04-01",
-        "firstAccountingPeriodEndDate" -> "2018-03-31"
+        "firstAccountingPeriodEndDate" -> "2018-03-31",
+        "quarterTypeElection" -> Document(
+          "quarterReportingType" -> "STANDARD",
+          "taxYearofElection" -> "2022"
+        )
       )
 
       cessation.fold(base) { kv =>
@@ -66,7 +72,7 @@ object BusinessDataUtils {
 
   def createPropertyData(ukProperty: Boolean, foreignProperty: Boolean): Seq[Document] = {
 
-    def propertyDocument(incomeSourceType: String, incomeSourceId: String): Document =
+    def propertyDocument(incomeSourceType: String, incomeSourceId: String): Document = {
       Document(
         "incomeSourceId"                 -> incomeSourceId,
         "accPeriodSDate"                 -> s"$currentYear-04-06",
@@ -79,12 +85,91 @@ object BusinessDataUtils {
         "firstAccountingPeriodStartDate" -> "2017-04-06",
         "firstAccountingPeriodEndDate"   -> "2018-04-05",
         "incomeSourceType"               -> incomeSourceType,
-        "tradingSDate"                   -> "2015-05-01"
+        "tradingSDate"                   -> "2015-05-01",
+        "quarterTypeElection" -> Document(
+          "quarterReportingType" -> "STANDARD",
+          "taxYearofElection" -> "2022"
+        )
       )
+    }
 
     Seq(
       Option.when(ukProperty)(propertyDocument("02", "XAIS00000000011")),
       Option.when(foreignProperty)(propertyDocument("03", "XAIS00000000012"))
     ).flatten
+  }
+
+  def createLatentBusinessData(latencyIndicator1: String, latencyIndicator2: String): Seq[Document] = {
+      Seq(Document(
+        "incomeSourceId" -> s"XAIS00000000001",
+        "accPeriodSDate" -> s"$currentTaxYear-04-01",
+        "accPeriodEDate" -> s"${currentTaxYear + 1}-03-31",
+        "tradingName" -> s"Business 1",
+        "incomeSource" -> s"Manufacturing 1",
+        "businessAddressDetails" -> Document(
+          "addressLine1" -> s"1 Street Street",
+          "addressLine2" -> "Cityburg",
+          "addressLine3" -> "Countryshire",
+          "addressLine4" -> "Townville",
+          "postalCode" -> s"AA1 AAA",
+          "countryCode" -> "GB"
+        ),
+        "tradingSDate" -> "2013-01-01",
+        "seasonalFlag" -> false,
+        "paperLessFlag" -> true,
+        "firstAccountingPeriodStartDate" -> "2017-04-01",
+        "firstAccountingPeriodEndDate" -> "2018-03-31",
+        "quarterTypeElection" -> Document(
+          "quarterReportingType" -> "STANDARD",
+          "taxYearofElection" -> "2022"
+        ),
+        "latencyDetails" -> Document(
+          "latencyEndDate" -> s"${currentTaxYear + 3}-04-05",
+          "taxYear1" -> s"${currentTaxYear + 1}",
+          "latencyIndicator1" -> s"$latencyIndicator1",
+          "taxYear2" -> s"${currentTaxYear + 2}",
+          "latencyIndicator2" -> s"$latencyIndicator2"
+        )
+      )
+    )
+  }
+
+  def createLatentPropertyData(latencyIndicator1: String, latencyIndicator2: String): Seq[Document] = {
+
+    def propertyDocument(incomeSourceType: String, incomeSourceId: String): Document = {
+      Document(
+        "incomeSourceId" -> incomeSourceId,
+        "accPeriodSDate" -> s"$currentYear-04-06",
+        "accPeriodEDate" -> s"${currentYear + 1}-04-05",
+        "numPropRentedUK" -> "4",
+        "numPropRentedEEA" -> "0",
+        "numPropRentedNONEEA" -> "0",
+        "numPropRented" -> "4",
+        "paperLessFlag" -> true,
+        "firstAccountingPeriodStartDate" -> "2017-04-06",
+        "firstAccountingPeriodEndDate" -> "2018-04-05",
+        "incomeSourceType" -> incomeSourceType,
+        "tradingSDate" -> "2015-05-01",
+        "quarterTypeElection" -> Document(
+          "quarterReportingType" -> "STANDARD",
+          "taxYearofElection" -> "2022"
+        ),
+        "latencyDetails" -> Document(
+          "latencyEndDate" -> s"${currentTaxYear + 3}-04-05",
+          "taxYear1" -> s"${currentTaxYear + 1}",
+          "latencyIndicator1" -> s"$latencyIndicator1",
+          "taxYear2" -> s"${currentTaxYear + 2}",
+          "latencyIndicator2" -> s"$latencyIndicator2"
+        )
+      )
+    }
+
+    propertyDocument("02", "XAIS00000000011") :: propertyDocument("03", "XAIS00000000012") :: Nil
+  }
+
+  def getLatencyLetter(latencyIndicator: String): String = latencyIndicator match {
+    case "Annual" => "A"
+    case "Quarterly" => "Q"
+    case _ => throw new IllegalArgumentException(s"Invalid latency indicator: $latencyIndicator")
   }
 }

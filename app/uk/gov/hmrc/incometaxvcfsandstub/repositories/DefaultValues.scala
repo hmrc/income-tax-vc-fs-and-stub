@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.repositories
 
-import uk.gov.hmrc.incometaxvcfsandstub.models.DataModel
+import uk.gov.hmrc.incometaxvcfsandstub.models.{DataModel, TaxYear}
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.GET
 import org.mongodb.scala.model.Filters.equal
 import uk.gov.hmrc.incometaxvcfsandstub.parsers.ITSAStatusUrlParser.extractTaxYear
@@ -25,6 +25,7 @@ import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.{AnyContent, MessagesControllerComponents, Result, WrappedRequest}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,20 +60,27 @@ class DefaultValues @Inject() (
   }
 
   def getHipItsaStatusDefaultJson(taxYear: String): JsValue = {
-    val itsaAStatus = List(
-      ITSAStatus(
-        taxYear = s"20$taxYear",
-        itsaStatusDetails = List(
-          ITSAStatusDetails(
-            submittedOn = "2022-01-10T06:14:00Z",
-            status = "02",
-            statusReason = "00"
-          )
-        )
-      )
-    )
-    Json.toJson(itsaAStatus)
+    Json.toJson(createItsaStatusJson(taxYear) ++ createItsaStatusJson(getNextYear(taxYear)))
   }
+
+  def getHipItsaStatusDefaultJsonCyPlusOneUser(taxYear: String): JsValue = {
+    def incrementTaxYear(range: String, increment: Int): String = range.split("-").toList.map(_.toInt + increment).map(n => f"$n%02d").mkString("-")
+    val currentTaxYearEnd = TaxYear.getStartYear(LocalDate.now()) + 1
+
+    TaxYear.createTaxYearGivenTaxYearRange(taxYear)
+      .map { rangeTaxYear =>
+        val increment = if (rangeTaxYear.endYear == currentTaxYearEnd) 1 else 2
+        val nextTaxYear = incrementTaxYear(taxYear, increment)
+        createItsaStatusJson(nextTaxYear)
+      }
+      .map(Json.toJson(_))
+      .getOrElse {
+        throw new IllegalArgumentException(
+          s"Failed to parse tax year from request: $taxYear"
+        )
+      }
+  }
+
 
   def getResponse(url: String)(implicit request: WrappedRequest[AnyContent]): Result = {
     extractTaxYear(url) match {
@@ -95,5 +103,25 @@ class DefaultValues @Inject() (
         case None =>
           NotFound(s"Failed to find the default API endpoint in the repository matching the URI: $url")
       }
+  }
+
+  private def getNextYear(taxYear: String): String = {
+    val years = taxYear.split("-").map(_.toInt)
+    s"${years.head + 1}-${years.last + 1}"
+  }
+
+  private def createItsaStatusJson(taxYear: String) = {
+    List(
+      ITSAStatus(
+        taxYear = s"20$taxYear",
+        itsaStatusDetails = List(
+          ITSAStatusDetails(
+            submittedOn = "2022-01-10T06:14:00Z",
+            status = "02",
+            statusReason = "00"
+          )
+        )
+      )
+    )
   }
 }
