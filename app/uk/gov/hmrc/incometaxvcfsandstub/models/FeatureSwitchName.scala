@@ -17,7 +17,7 @@
 package uk.gov.hmrc.incometaxvcfsandstub.models
 
 import play.api.Logger
-import play.api.libs.json._
+import play.api.libs.json.*
 import play.api.mvc.PathBindable
 
 import scala.collection.immutable
@@ -77,6 +77,8 @@ object FeatureSwitchName {
       JsSuccess(RecentActivity)
     case JsString(MortgageEvidence.name) =>
       JsSuccess(MortgageEvidence)
+    case JsString(IdempotencyKeyForCreateIncomeSource.name) =>
+      JsSuccess(IdempotencyKeyForCreateIncomeSource)
     case invalidName =>
       Logger("application").error(s"Invalid feature switch Json found: $invalidName")
       JsSuccess(InvalidFS)
@@ -120,7 +122,8 @@ object FeatureSwitchName {
       `CY+1YouMustWaitToSignUpPageEnabled`,
       NewHomePage,
       OverseasBusinessAddress,
-      MortgageEvidence
+      MortgageEvidence,
+      IdempotencyKeyForCreateIncomeSource
     )
 
   def get(str: String): Option[FeatureSwitchName] = allFeatureSwitches find (_.name == str)
@@ -235,4 +238,9 @@ case object OverseasBusinessAddress extends FeatureSwitchName {
 case object MortgageEvidence extends FeatureSwitchName {
   override val name: String = "mortgage-evidence"
   override val toString: String = "Mortgage Evidence"
+}
+
+case object IdempotencyKeyForCreateIncomeSource extends FeatureSwitchName {
+  override val name: String = "idempotency-key-for-create-income-source"
+  override val toString: String = "Idempotency Key for Create an Income Source"
 }
