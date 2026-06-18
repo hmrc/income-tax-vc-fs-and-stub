@@ -38,6 +38,8 @@ POST        /income-tax-view-change/override/obligations-data/:nino             
 +nocsrf
 POST         /income-tax-view-change/override/repayments-data/estimatedRepaymentDate        uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentsRequestController.overrideEstimatedRepaymentDate()
 
++nocsrf
+POST         /income-tax-view-change/override/calculation-type/:nino                    uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.overrideCalculationType(nino: String)
 ### Intercepting API #1553 after Poa Amount updated
 ###GET         /enterprise/02.00.00/financial-data/NINO/:nino/ITSA                            uk.gov.hmrc.incometaxvcfsandstub.controllers.FinancialDetailsRequestController.transform(nino: String)
 # API #1553  => #5277 Hip migration

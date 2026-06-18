@@ -16,11 +16,15 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.utils
 
+import org.mongodb.scala.bson.collection.immutable.Document
 import uk.gov.hmrc.incometaxvcfsandstub.models.{CalcSuccessReponse, CalcSummary}
 
+import java.time.Instant
 import scala.util.Try
 
 object CalculationUtils {
+
+  final val calculationListKey = "response.calculationsSummary"
 
   private def ninoMatchCharacters(nino: String): String =
     s"${nino.charAt(0)}${nino.charAt(7)}"
@@ -122,5 +126,38 @@ object CalculationUtils {
        |      }
        |]
        |""".stripMargin
+  }
+  
+  def createCalculationList(latestCalculationType: String, previousCalculationType: String): Seq[Document] = {
+    val currentTime = Instant.now()
+
+    Seq(Document(
+      "calculationId" -> "9a7c42f1-6bde-4c28-b913-3f5e8d2a7c9a",
+      "calculationTimestamp" -> s"${currentTime.toString}",
+      "calculationType" -> latestCalculationType,
+      "requestedBy" -> "CUSTOMER",
+      "calculationTrigger" -> "class2NICEvent",
+      "calculationOutcome" -> "PROCESSED"
+    ),Document(
+        "calculationId" -> "9a7c42f1-6bde-4c28-b913-3f5e8d2a7c9b",
+        "calculationTimestamp" -> s"${currentTime.minusSeconds(86400).toString}",
+        "calculationType" -> previousCalculationType,
+        "requestedBy" -> "CUSTOMER",
+        "calculationTrigger" -> "cesaSAReturn",
+        "calculationOutcome" -> "PROCESSED"
+      )
+    )
+  }
+  
+  def getCalculationType(calculationType: String): String = {
+    calculationType match {
+      case "In Year" => "IY"
+      case "Finalised" => "DF"
+      case "Correction" => "CO"
+      case "Amendment" => "CA"
+      case "Intent to Finalise" => "IF"
+      case "Intent to Amend" => "IA"
+      case _ => throw new IllegalArgumentException(s"Invalid calculation type: $calculationType")
+    }
   }
 }

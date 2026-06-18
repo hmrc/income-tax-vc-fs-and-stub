@@ -38,7 +38,7 @@ class BusinessDetailsRequestController @Inject()(cc: MessagesControllerComponent
                                                   val configuration: Configuration)
     extends FrontendController(cc) with Logging with AddDelays {
 
-  def overrideBusinessDetailsUrl(mtdid: String): String = {
+  private def overrideBusinessDetailsUrl(mtdid: String): String = {
     s"/etmp/RESTAdapter/itsa/taxpayer/business-details?mtdReference=$mtdid"
   }
 

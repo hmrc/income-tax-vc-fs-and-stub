@@ -22,12 +22,13 @@ import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logger, Logging}
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.GET
-import uk.gov.hmrc.incometaxvcfsandstub.models._
+import uk.gov.hmrc.incometaxvcfsandstub.models.*
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
-import uk.gov.hmrc.incometaxvcfsandstub.utils.AddDelays
-import uk.gov.hmrc.incometaxvcfsandstub.utils.CalculationUtils._
+import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, CalculationUtils}
+import uk.gov.hmrc.incometaxvcfsandstub.utils.CalculationUtils.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{ExecutionContext, Future}
@@ -46,6 +47,12 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
   implicit val calcSummaryWrites: OWrites[CalcSummary] = Json.writes[CalcSummary]
 
   val ninoMatchCharacters: String => String = (nino: String) => s"${nino.charAt(0)}${nino.charAt(7)}"
+  
+  private def overrideCalculationTypeUrl(nino: String): String = {
+    val previousTaxYearEnd = TaxYear.getStartYear(LocalDate.now())
+    val taxYearRange = TaxYear(previousTaxYearEnd).rangeShort
+    s"/income-tax/$taxYearRange/view/$nino/calculations-summary"
+  }
 
   def getCalcLegacy(nino: String, calcId: String): Action[AnyContent] =
     Action.async { _ =>
@@ -285,7 +292,7 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
     }
 
   // HIP #5191 //
-  def generateCalculationList(nino: String, taxYear: Option[Int]): Action[AnyContent] =
+  def generateCalculationList(nino: String, taxYear: Option[Int]): Action[AnyContent] = {
     Action.async { _ =>
       withDelay(500.milliseconds) {
         logger.info(s"Generating calculation list for nino: $nino, taxYear: $taxYear")
@@ -318,4 +325,40 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
         }
       }
     }
+  }
+
+  def overrideCalculationType(nino: String): Action[AnyContent] = {
+    Action.async { implicit request =>
+      request.body.asJson match {
+        case None => Future.successful(BadRequest("[overrideCalculationType] No JSON found - Expected JSON data"))
+        case Some(json) => json.validate[CalculationTypeModel].fold(
+          invalid = _ => Future.successful(BadRequest("[overrideCalculationType] Invalid JSON data")),
+          valid = userModel => {
+            val url = overrideCalculationTypeUrl(nino)
+
+            val latestCalculationType = CalculationUtils.getCalculationType(userModel.latestCalculationType)
+            val previousCalculationType = CalculationUtils.getCalculationType(userModel.previousCalculationType)
+
+            val calculationListData = CalculationUtils.createCalculationList(latestCalculationType, previousCalculationType)
+
+            for {
+              calculationUpdate <- dataRepository.clearAndReplace(url, CalculationUtils.calculationListKey, calculationListData)
+            } yield {
+              if (calculationUpdate.wasAcknowledged()) {
+                logger.info(s"[overrideCalculationType] Successfully updated calculation type for nino: $nino at url: $url")
+                Ok("Success")
+              } else {
+                logger.warn(s"[overrideCalculationType] Failed to update calculation type for nino: $nino")
+                InternalServerError("Failed to update calculation type")
+              }
+            }
+          }.recover {
+            case ex =>
+              logger.error(s"[overrideCalculationType] Unexpected error updating calculation type for nino: $nino", ex)
+              InternalServerError("Unexpected error occurred")
+          }
+        )
+      }
+    }
+  }
 }
