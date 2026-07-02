@@ -18,7 +18,8 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.when
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
+import org.mongodb.scala.model.Filters
+import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.{JsArray, Json}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, status}
