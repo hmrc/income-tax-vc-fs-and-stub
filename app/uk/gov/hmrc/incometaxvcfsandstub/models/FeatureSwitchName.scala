@@ -55,6 +55,8 @@ object FeatureSwitchName {
       JsSuccess(SignUpFs)
     case JsString(DisplayBusinessStartDate.name) =>
       JsSuccess(DisplayBusinessStartDate)
+    case JsString(ObligationsFrontend.name) =>
+      JsSuccess(ObligationsFrontend)
     case JsString(PenaltiesAndAppeals.name) =>
       JsSuccess(PenaltiesAndAppeals)
     case JsString(PenaltiesBackendEnabled.name) =>
@@ -114,6 +116,7 @@ object FeatureSwitchName {
       OptOutFs,
       SignUpFs,
       DisplayBusinessStartDate,
+      ObligationsFrontend,
       PenaltiesAndAppeals,
       PenaltiesBackendEnabled,
       SubmitClaimToAdjustToNrs,
@@ -165,6 +168,11 @@ case object PaymentHistoryRefunds extends FeatureSwitchName {
   override val name = "payment-history-refunds"
 
   override def toString: String = "Payment History Refunds"
+}
+
+case object ObligationsFrontend extends FeatureSwitchName {
+  override val name: String = "obligations-frontend"
+  override def toString: String = "Obligations Frontend"
 }
 
 case object OptOutFs extends FeatureSwitchName {
