@@ -18,10 +18,21 @@ package uk.gov.hmrc.incometaxvcfsandstub.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName, FeatureSwitches}
 
 @Singleton
 class AppConfig @Inject()(config: Configuration) {
 
   val appName: String = config.get[String]("appName")
+
+  def getFSListFromConfig: FeatureSwitches = {
+    val featureSwitches = FeatureSwitchName.allFeatureSwitches.toList.map { fs =>
+      FeatureSwitch(
+        fs,
+        isEnabled = config.getOptional[Boolean](s"feature-switch.enable-${fs.name}").getOrElse(false)
+      )
+    }
+    FeatureSwitches(featureSwitches)
+  }
 
 }

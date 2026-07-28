@@ -18,8 +18,8 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers.features
 
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitches, FeatureSwitchName}
-
+import uk.gov.hmrc.incometaxvcfsandstub.config.AppConfig
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName, FeatureSwitches}
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.FeatureSwitchRepository
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
@@ -29,7 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class FeatureSwitchController @Inject()(
                                          cc: ControllerComponents,
-                                         featureSwitchRepository: FeatureSwitchRepository
+                                         featureSwitchRepository: FeatureSwitchRepository,
+                                         appConfig: AppConfig
                                        )(implicit ec: ExecutionContext) extends BackendController(cc) {
 
   def disableAll: Action[AnyContent] = Action.async {
@@ -44,10 +45,17 @@ class FeatureSwitchController @Inject()(
     }
   }
 
-  def getAll: Action[AnyContent] = Action.async {
-    featureSwitchRepository.getFeatureSwitches.map { featureSwitches =>
-      Status(OK)(Json.toJson(featureSwitches))
+  def getAll(configOnly: Boolean): Action[AnyContent] = Action.async {
+    lazy val configFeatureSwitches: FeatureSwitches = appConfig.getFSListFromConfig
+    val featureSwitches = if(configOnly) {
+      Future.successful(configFeatureSwitches)
+    } else {
+      featureSwitchRepository.getFeatureSwitches.map { fs =>
+        fs.addMissingFeatureSwitches(configFeatureSwitches)
+      }
     }
+    
+    featureSwitches.map(fs => Status(OK)(Json.toJson(fs.features)))
   }
 
   def resetToProd: Action[AnyContent] = Action.async {

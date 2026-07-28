@@ -5,7 +5,7 @@ POST /enable-all                                                             uk.
 + nocsrf
 POST /disable-all                                                            uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.disableAll()
 + nocsrf
-GET /                                                                        uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.getAll()
+GET /                                                                        uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.getAll(configOnly: Boolean ?= false)
 + nocsrf
 POST /                                                                       uk.gov.hmrc.incometaxvcfsandstub.controllers.features.FeatureSwitchController.setFeatureSwitches()
 + nocsrf
