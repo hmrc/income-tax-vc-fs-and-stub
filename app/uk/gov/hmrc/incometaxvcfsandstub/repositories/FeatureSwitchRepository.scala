@@ -20,7 +20,7 @@ import org.mongodb.scala.ToSingleObservablePublisher
 import org.mongodb.scala.model.*
 import org.mongodb.scala.model.Filters.*
 import play.api.Configuration
-import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName}
+import uk.gov.hmrc.incometaxvcfsandstub.models.{FeatureSwitch, FeatureSwitchName, FeatureSwitches}
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.{Codecs, PlayMongoRepository}
 import uk.gov.hmrc.mongo.transaction.Transactions
@@ -53,11 +53,11 @@ class FeatureSwitchRepository @Inject()(val mongoComponent: MongoComponent,
       .find(equal("name", name.name))
       .headOption()
 
-  def getFeatureSwitches: Future[List[FeatureSwitch]] =
+  def getFeatureSwitches: Future[FeatureSwitches] =
     collection
       .find()
       .toFuture()
-      .map(_.toList)
+      .map(featureSwitches => FeatureSwitches(featureSwitches.toList))
 
   def setFeatureSwitch(name: FeatureSwitchName, enabled: Boolean): Future[Boolean] =
     collection

@@ -20,6 +20,12 @@ import play.api.libs.json.{Json, OFormat}
 
 case class FeatureSwitches(features: List[FeatureSwitch]) {
   val toMap: Map[FeatureSwitchName, Boolean] = features.map(feature => feature.name -> feature.isEnabled).toMap
+
+  def addMissingFeatureSwitches(defaultFeatureSwitches: FeatureSwitches): FeatureSwitches = {
+    val existingFeatureSwitchNames = features.map(_.name).toSet
+    val missingFeatureSwitches = defaultFeatureSwitches.features.filterNot(fs => existingFeatureSwitchNames.contains(fs.name))
+    FeatureSwitches(features ++ missingFeatureSwitches)
+  }
 }
 
 object FeatureSwitches {
