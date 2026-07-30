@@ -89,7 +89,9 @@ Causes the view and change journey to route requests to the new Returns service 
 
 #### Revenue Amendments
 
-Seems to be unused at the moment.
+When implemented, View and Change will display a message to the user on the Tax Year Summary page indicating that their tax calculation has been amended by HMRC. 
+
+This may result in an additional charge, a credit, or no change to the overall liability, depending on the nature of the amendment.
 
 #### Self Serve Time To Pay R17
 
