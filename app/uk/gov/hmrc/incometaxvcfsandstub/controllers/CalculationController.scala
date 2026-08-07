@@ -334,7 +334,6 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
         case Some(json) => json.validate[CalculationsModel].fold(
           invalid = _ => Future.successful(BadRequest("[overwriteCalculationData] Invalid JSON data")),
           valid = userModel => {
-            println(Console.MAGENTA + userModel + Console.RESET)
             val latestCalculationData = CalculationUtils.createCalculationMetadata(userModel.latestCalculationReason)
             val previousCalculationData = CalculationUtils.createCalculationMetadata(userModel.previousCalculationReason)
 
