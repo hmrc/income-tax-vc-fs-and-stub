@@ -36,6 +36,9 @@ POST        /income-tax-view-change/override/latent-business-data/:mtdid        
 POST        /income-tax-view-change/override/obligations-data/:nino                     uk.gov.hmrc.incometaxvcfsandstub.controllers.ObligationsRequestController.overwriteObligationsData(nino: String)
 
 +nocsrf
+POST        /income-tax-view-change/override/tax-calculation-data/:nino                 uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.overwriteCalculationData(nino: String)
+
++nocsrf
 POST         /income-tax-view-change/override/repayments-data/estimatedRepaymentDate        uk.gov.hmrc.incometaxvcfsandstub.controllers.RepaymentsRequestController.overrideEstimatedRepaymentDate()
 
 ### Intercepting API #1553 after Poa Amount updated

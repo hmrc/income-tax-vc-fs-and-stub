@@ -70,4 +70,14 @@ class DataRepository @Inject() (repository: DataRepositoryBase) {
       .updateOne(filter, updates, UpdateOptions().upsert(true))
       .toFuture()
   }
+
+  def replaceObjectField(url: String, objectFieldPath: String, newObject: Document): Future[UpdateResult] = {
+    val filter = Filters.equal("_id", url)
+    val bsonObject: BsonDocument = newObject.toBsonDocument
+    val update = Updates.set(objectFieldPath, bsonObject)
+
+    repository.collection
+      .updateOne(filter, update, UpdateOptions().upsert(true))
+      .toFuture()
+  }
 }
