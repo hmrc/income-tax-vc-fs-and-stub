@@ -16,11 +16,13 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.utils
 
+import org.mongodb.scala.bson.collection.Document
 import uk.gov.hmrc.incometaxvcfsandstub.models.{CalcSuccessReponse, CalcSummary}
 
 import scala.util.Try
 
 object CalculationUtils {
+  final val calculationMetadataDataKey = "response.metadata"
 
   private def ninoMatchCharacters(nino: String): String =
     s"${nino.charAt(0)}${nino.charAt(7)}"
@@ -122,5 +124,19 @@ object CalculationUtils {
        |      }
        |]
        |""".stripMargin
+  }
+
+  def createCalculationMetadata(calculationReason: String): Document = {
+    Document(
+      "calculationId" -> "0f0b5d95-c719-45f9-a6ec-55fd3144f3d4",
+      "taxYear" -> 2026,
+      "requestedBy" -> "customer",
+      "requestedTimestamp" -> "2026-07-15T09:35:15.094Z",
+      "calculationReason" -> calculationReason,
+      "calculationTimestamp" -> "2025-09-30T09:15:34.0Z",
+      "calculationType" -> "CA",
+      "periodFrom" -> "2025-04-06",
+      "periodTo" -> "2025-07-05"
+    )
   }
 }

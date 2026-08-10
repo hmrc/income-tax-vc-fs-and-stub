@@ -22,10 +22,10 @@ import play.api.libs.json.{JsValue, Json, OWrites}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logger, Logging}
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.GET
-import uk.gov.hmrc.incometaxvcfsandstub.models._
+import uk.gov.hmrc.incometaxvcfsandstub.models.*
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
-import uk.gov.hmrc.incometaxvcfsandstub.utils.AddDelays
-import uk.gov.hmrc.incometaxvcfsandstub.utils.CalculationUtils._
+import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, CalculationUtils}
+import uk.gov.hmrc.incometaxvcfsandstub.utils.CalculationUtils.*
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -316,6 +316,48 @@ class CalculationController @Inject()(cc: MessagesControllerComponents,
           case _ =>
             Future(Ok(Json.parse(getCalculationListSuccessResponse(ninoMatchCharacters(nino).toLowerCase, taxYear))))
         }
+      }
+    }
+    
+  private def overrideLatestCalculationUrl(nino: String): String = {
+    s"/itsa/income-tax/v1/25-26/view/calculations/liability/$nino/9d0940ef-9966-4319-a1d2-0d2d12d35eac"
+  }
+
+  private def overridePreviousCalculationUrl(nino: String): String = {
+    s"/itsa/income-tax/v1/25-26/view/calculations/liability/$nino/0f0b5d95-c719-45f9-a6ec-55fd3144f3d4"
+  }
+
+  def overwriteCalculationData(nino: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      request.body.asJson match {
+        case None => Future.successful(BadRequest("[overwriteCalculationData] No JSON found - Expected JSON data"))
+        case Some(json) => json.validate[CalculationsModel].fold(
+          invalid = _ => Future.successful(BadRequest("[overwriteCalculationData] Invalid JSON data")),
+          valid = userModel => {
+            val latestCalculationData = CalculationUtils.createCalculationMetadata(userModel.latestCalculationReason)
+            val previousCalculationData = CalculationUtils.createCalculationMetadata(userModel.previousCalculationReason)
+
+            for {
+              latestCalculationUpdate <- dataRepository.replaceObjectField(overrideLatestCalculationUrl(nino), CalculationUtils.calculationMetadataDataKey, latestCalculationData)
+              previousCalculationUpdate <- dataRepository.replaceObjectField(overridePreviousCalculationUrl(nino), CalculationUtils.calculationMetadataDataKey, previousCalculationData)
+            } yield {
+              (latestCalculationUpdate.wasAcknowledged(), previousCalculationUpdate.wasAcknowledged()) match {
+                case (true, true) =>
+                  logger.info("Successfully updated calculation details")
+                  Ok("Success")
+                case (false, false) =>
+                  logger.warn("Failed to update both latest and previous calculation details")
+                  InternalServerError("Failed to update both latest and previous calculation details")
+                case (false, true) =>
+                  logger.warn("Failed to update latest calculation details")
+                  InternalServerError("Failed to update latest calculation details")
+                case (true, false) =>
+                  logger.warn("Failed to update previous calculation details")
+                  InternalServerError("Failed to update previous calculation details")
+              }
+            }
+          }
+        )
       }
     }
 }
