@@ -18,7 +18,7 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.http.Status.OK
+import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.incometaxvcfsandstub.controllers.helpers.DataHelper
@@ -35,13 +35,14 @@ class ObligationsRequestControllerSpec extends TestSupport with DataHelper with 
 
   "overwriteObligationsData" should {
     "return status OK" when {
-      "overwriting business data for a given MTD ID" in {
+      "the repository successfully removes existing obligations and stores the new ones" in {
         lazy val request = FakeRequest()
-          when(mockDataRepository.clearAndReplace(any(), any(), any())).thenReturn(Future.successful(successUpdateResult))
-  
-          val result = TestObligationsRequestController.overwriteObligationsData(mtdId)(request)
-  
-          status(result) shouldBe OK
+        when(mockDataRepository.removeByIdPrefix(any())).thenReturn(Future.successful(successDeleteResult))
+        when(mockDataRepository.addEntry(any())).thenReturn(Future.successful(successUpdateResult))
+
+        val result = TestObligationsRequestController.overwriteObligationsData(mtdId)(request)
+
+        status(result) shouldBe OK
       }
     }
   }

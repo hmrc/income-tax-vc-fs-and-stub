@@ -16,49 +16,57 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.utils
 
-import org.mongodb.scala.Document
+import play.api.libs.json.{JsValue, Json}
 
 import java.time.LocalDate
 
 object ObligationsDataUtils {
-  final val obligationsDataKey = "response.obligations"
   private val today = LocalDate.now()
 
-  def createObligationsData(): Seq[Document] = {
-    val currentTaxYearStart = if(today.isBefore(LocalDate.of(today.getYear, 4, 6))) LocalDate.of(today.minusYears(1).getYear, 4, 6) else LocalDate.of(today.getYear, 4, 6)
-    val taxYearTaxReturnDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31)
+  def createFulfilledObligationsData(): JsValue = {
+    val currentTaxYearStart =
+      if (today.isBefore(LocalDate.of(today.getYear, 4, 6)))
+        LocalDate.of(today.minusYears(1).getYear, 4, 6)
+      else
+        LocalDate.of(today.getYear, 4, 6)
 
-    Seq(Document(
-      "identification" -> Document(
-        "incomeSourceType" -> "ITSB",
-        "referenceNumber" -> s"XAIS00000000001",
-        "referenceType" -> "MTDBIS"
-      ),
-      "obligationDetails" -> Seq(
-        Document(
-          "status" -> "F",
-          s"inboundCorrespondenceFromDate" -> currentTaxYearStart.minusYears(1).toString,
-          s"inboundCorrespondenceToDate" -> currentTaxYearStart.minusDays(1).toString,
-          "inboundCorrespondenceDueDate" -> taxYearTaxReturnDueDate.toString,
-          "inboundCorrespondenceDateReceived" -> today.minusMonths(1).toString,
-          "periodKey" -> "#001"
+    val taxYearTaxReturnDueDate =
+      LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31)
+
+    Json.obj(
+      "obligations" -> Json.arr(
+        Json.obj(
+          "identification" -> Json.obj(
+            "incomeSourceType" -> "ITSB",
+            "referenceNumber" -> "XAIS00000000001",
+            "referenceType" -> "MTDBIS"
+          ),
+          "obligationDetails" -> Json.arr(
+            Json.obj(
+              "status" -> "F",
+              "inboundCorrespondenceFromDate" -> currentTaxYearStart.minusYears(1).toString,
+              "inboundCorrespondenceToDate" -> currentTaxYearStart.minusDays(1).toString,
+              "inboundCorrespondenceDueDate" -> taxYearTaxReturnDueDate.toString,
+              "inboundCorrespondenceDateReceived" -> today.minusMonths(1).toString,
+              "periodKey" -> "#001"
+            )
+          )
         ),
-    )
-    ),
-      Document(
-        "identification" -> Document(
-          "incomeSourceType" -> "ITSA",
-          "referenceNumber" -> s"XAIT00000000002",
-          "referenceType" -> "MTDBIS"
-        ),
-        "obligationDetails" -> Seq(
-          Document(
-            "status" -> "F",
-            s"inboundCorrespondenceFromDate" -> currentTaxYearStart.minusYears(1).toString,
-            s"inboundCorrespondenceToDate" -> currentTaxYearStart.minusDays(1).toString,
-            "inboundCorrespondenceDueDate" -> taxYearTaxReturnDueDate.toString,
-            "inboundCorrespondenceDateReceived" -> today.toString,
-            "periodKey" -> "C"
+        Json.obj(
+          "identification" -> Json.obj(
+            "incomeSourceType" -> "ITSA",
+            "referenceNumber" -> "XAIT00000000002",
+            "referenceType" -> "MTDBIS"
+          ),
+          "obligationDetails" -> Json.arr(
+            Json.obj(
+              "status" -> "F",
+              "inboundCorrespondenceFromDate" -> currentTaxYearStart.minusYears(1).toString,
+              "inboundCorrespondenceToDate" -> currentTaxYearStart.minusDays(1).toString,
+              "inboundCorrespondenceDueDate" -> taxYearTaxReturnDueDate.toString,
+              "inboundCorrespondenceDateReceived" -> today.toString,
+              "periodKey" -> "C"
+            )
           )
         )
       )
