@@ -36,6 +36,8 @@ class DataRepository @Inject() (repository: DataRepositoryBase) {
 
   def removeById(url: String): Future[DeleteResult] = repository.collection.deleteOne(equal("_id", url)).toFuture()
 
+  def removeByIdPrefix(prefix: String): Future[DeleteResult] = repository.collection.deleteMany(Filters.regex("_id", s"^${java.util.regex.Pattern.quote(prefix)}")).toFuture()
+
   def addEntry(document: DataModel): Future[UpdateResult] =
     repository.collection
       .replaceOne(

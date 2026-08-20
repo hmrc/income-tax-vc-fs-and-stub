@@ -19,10 +19,12 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 import org.apache.pekko.actor.ActorSystem
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logging}
+import uk.gov.hmrc.incometaxvcfsandstub.models.DataModel
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.DataRepository
 import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, ObligationsDataUtils}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
+import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 
@@ -34,18 +36,30 @@ class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
                                                   val configuration: Configuration)
     extends FrontendController(cc) with Logging with AddDelays {
 
-  private def overrideObligationsUrl(nino: String): String = {
+  private final val obligationsSchemaId = "getDesObligations"
+
+  private def prefixObligationsUrl(nino: String): String = {
     s"/enterprise/obligation-data/nino/$nino/ITSA?status=F"
   }
 
   def overwriteObligationsData(nino: String): Action[AnyContent] =
     Action.async { implicit request =>
-      val url = overrideObligationsUrl(nino)
+      val currentDate = LocalDate.now()
+      val createdUrl = s"${prefixObligationsUrl(nino)}&from=${currentDate.minusDays(90)}&to=$currentDate"
+      
+      val obligationsData = ObligationsDataUtils.createFulfilledObligationsData()
 
-      val obligationsData = ObligationsDataUtils.createObligationsData()
+      val newObligationsData = DataModel(
+        _id = createdUrl,
+        schemaId = obligationsSchemaId,
+        method = "GET",
+        status = 200,
+        response = Some(obligationsData)
+      )
 
       for {
-        obligationsUpdate <- dataRepository.clearAndReplace(url, ObligationsDataUtils.obligationsDataKey, obligationsData)
+        _ <- dataRepository.removeByIdPrefix(prefixObligationsUrl(nino))
+        obligationsUpdate <- dataRepository.addEntry(newObligationsData)
       } yield {
         if (obligationsUpdate.wasAcknowledged()) {
           logger.info("Successfully updated obligation details")

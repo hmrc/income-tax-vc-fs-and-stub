@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.incometaxvcfsandstub.utils
 
-import org.mongodb.scala.bson.BsonString
 import uk.gov.hmrc.incometaxvcfsandstub.testUtils.TestSupport
 
 import java.time.LocalDate
@@ -24,59 +23,98 @@ import java.time.LocalDate
 class ObligationsDataUtilsSpec extends TestSupport {
 
   "createObligationsData" should {
-    "generate obligations data with correct structure and dates for current tax year" in {
-      val obligationsData = ObligationsDataUtils.createObligationsData()
+    "return two obligation entries" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      (result \ "obligations").as[Seq[play.api.libs.json.JsValue]].size shouldBe 2
+    }
+
+    "return ITSB obligation as the first entry with correct identification" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val firstObligation = (result \ "obligations")(0)
+      (firstObligation \ "identification" \ "incomeSourceType").as[String] shouldBe "ITSB"
+      (firstObligation \ "identification" \ "referenceNumber").as[String] shouldBe "XAIS00000000001"
+      (firstObligation \ "identification" \ "referenceType").as[String] shouldBe "MTDBIS"
+    }
+
+    "return ITSA obligation as the second entry with correct identification" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val secondObligation = (result \ "obligations")(1)
+      (secondObligation \ "identification" \ "incomeSourceType").as[String] shouldBe "ITSA"
+      (secondObligation \ "identification" \ "referenceNumber").as[String] shouldBe "XAIT00000000002"
+      (secondObligation \ "identification" \ "referenceType").as[String] shouldBe "MTDBIS"
+    }
+
+    "return obligations with status Fulfilled" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val obligations = (result \ "obligations").as[Seq[play.api.libs.json.JsValue]]
+      obligations.foreach { obligation =>
+        val details = (obligation \ "obligationDetails")(0)
+        (details \ "status").as[String] shouldBe "F"
+      }
+    }
+
+    "return obligation dates relative to the current tax year" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
       val today = LocalDate.now()
-      val currentTaxYearStart = if (today.isBefore(LocalDate.of(today.getYear, 4, 6))) LocalDate.of(today.minusYears(1).getYear, 4, 6) else LocalDate.of(today.getYear, 4, 6)
-      val taxYearTaxReturnDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31)
+      val currentTaxYearStart =
+        if (today.isBefore(LocalDate.of(today.getYear, 4, 6)))
+          LocalDate.of(today.minusYears(1).getYear, 4, 6)
+        else
+          LocalDate.of(today.getYear, 4, 6)
+      val expectedFromDate = currentTaxYearStart.minusYears(1).toString
+      val expectedToDate = currentTaxYearStart.minusDays(1).toString
+      val expectedDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31).toString
 
-      obligationsData.size shouldBe 2
-
-      val itbsObligation = obligationsData.head
-      itbsObligation("identification").asDocument().getString("incomeSourceType") shouldBe BsonString("ITSB")
-      itbsObligation("obligationDetails").asArray().size() shouldBe 1
-      val itbsDetails = itbsObligation("obligationDetails").asArray().get(0).asDocument()
-      itbsDetails.getString("inboundCorrespondenceFromDate") shouldBe BsonString(currentTaxYearStart.minusYears(1).toString)
-      itbsDetails.getString("inboundCorrespondenceToDate") shouldBe BsonString(currentTaxYearStart.minusDays(1).toString)
-      itbsDetails.getString("inboundCorrespondenceDueDate") shouldBe BsonString(taxYearTaxReturnDueDate.toString)
-
-      val itsaObligation = obligationsData(1)
-      itsaObligation("identification").asDocument().getString("incomeSourceType") shouldBe BsonString("ITSA")
-      itsaObligation("obligationDetails").asArray().size() shouldBe 1
-      val itsaDetails = itsaObligation("obligationDetails").asArray().get(0).asDocument()
-      itsaDetails.getString("inboundCorrespondenceFromDate") shouldBe BsonString(currentTaxYearStart.minusYears(1).toString)
-      itsaDetails.getString("inboundCorrespondenceToDate") shouldBe BsonString(currentTaxYearStart.minusDays(1).toString)
-      itsaDetails.getString("inboundCorrespondenceDueDate") shouldBe BsonString(taxYearTaxReturnDueDate.toString)
+      val obligations = (result \ "obligations").as[Seq[play.api.libs.json.JsValue]]
+      obligations.foreach { obligation =>
+        val details = (obligation \ "obligationDetails")(0)
+        (details \ "inboundCorrespondenceFromDate").as[String] shouldBe expectedFromDate
+        (details \ "inboundCorrespondenceToDate").as[String] shouldBe expectedToDate
+        (details \ "inboundCorrespondenceDueDate").as[String] shouldBe expectedDueDate
+      }
     }
 
-    "handle edge case where today is exactly April 6" in {
-      val fixedToday = LocalDate.of(2026, 4, 6)
-      val obligationsData = ObligationsDataUtils.createObligationsData()
-      val currentTaxYearStart = LocalDate.of(fixedToday.getYear, 4, 6)
-      val taxYearTaxReturnDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31)
-
-      obligationsData.size shouldBe 2
-
-      val itbsObligation = obligationsData.head
-      val itbsDetails = itbsObligation("obligationDetails").asArray().get(0).asDocument()
-      itbsDetails.getString("inboundCorrespondenceFromDate") shouldBe BsonString(currentTaxYearStart.minusYears(1).toString)
-      itbsDetails.getString("inboundCorrespondenceToDate") shouldBe BsonString(currentTaxYearStart.minusDays(1).toString)
-      itbsDetails.getString("inboundCorrespondenceDueDate") shouldBe BsonString(taxYearTaxReturnDueDate.toString)
+    "return ITSB obligation with period key #001" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val details = (result \ "obligations")(0) \ "obligationDetails"
+      ((details)(0) \ "periodKey").as[String] shouldBe "#001"
     }
 
-    "handle edge case where today is before April 6" in {
-      val fixedToday = LocalDate.of(2026, 4, 5)
-      val obligationsData = ObligationsDataUtils.createObligationsData()
-      val currentTaxYearStart = LocalDate.of(fixedToday.minusYears(1).getYear, 4, 6)
-      val taxYearTaxReturnDueDate = LocalDate.of(currentTaxYearStart.plusYears(1).getYear + 1, 1, 31)
+    "return ITSA obligation with period key C" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val details = (result \ "obligations")(1) \ "obligationDetails"
+      (details(0) \ "periodKey").as[String] shouldBe "C"
+    }
 
-      obligationsData.size shouldBe 2
+    "return ITSB obligation with date received one month ago" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val details = (result \ "obligations")(0) \ "obligationDetails"
+      val expectedDateReceived = LocalDate.now().minusMonths(1).toString
+      (details(0) \ "inboundCorrespondenceDateReceived").as[String] shouldBe expectedDateReceived
+    }
 
-      val itsaObligation = obligationsData(1)
-      val itsaDetails = itsaObligation("obligationDetails").asArray().get(0).asDocument()
-      itsaDetails.getString("inboundCorrespondenceFromDate") shouldBe BsonString(currentTaxYearStart.toString)
-      itsaDetails.getString("inboundCorrespondenceToDate") shouldBe BsonString(currentTaxYearStart.plusYears(1).minusDays(1).toString)
-      itsaDetails.getString("inboundCorrespondenceDueDate") shouldBe BsonString(taxYearTaxReturnDueDate.toString)
+    "return ITSA obligation with date received as today" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val details = (result \ "obligations")(1) \ "obligationDetails"
+      val expectedDateReceived = LocalDate.now().toString
+      (details(0) \ "inboundCorrespondenceDateReceived").as[String] shouldBe expectedDateReceived
+    }
+
+    "return tax return due date on January 31 of the year following the current tax year start" in {
+      val result = ObligationsDataUtils.createFulfilledObligationsData()
+      val today = LocalDate.now()
+      val currentTaxYearStart =
+        if (today.isBefore(LocalDate.of(today.getYear, 4, 6)))
+          LocalDate.of(today.minusYears(1).getYear, 4, 6)
+        else
+          LocalDate.of(today.getYear, 4, 6)
+      val expectedDueDate = LocalDate.of(currentTaxYearStart.getYear + 1, 1, 31).toString
+
+      val obligations = (result \ "obligations").as[Seq[play.api.libs.json.JsValue]]
+      obligations.foreach { obligation =>
+        val details = (obligation \ "obligationDetails")(0)
+        (details \ "inboundCorrespondenceDueDate").as[String] shouldBe expectedDueDate
+      }
     }
   }
 }
