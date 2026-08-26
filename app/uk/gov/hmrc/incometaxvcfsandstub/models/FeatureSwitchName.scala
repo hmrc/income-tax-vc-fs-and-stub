@@ -269,7 +269,7 @@ case object RevenueAmendments extends FeatureSwitchName {
 }
 
 case object NewHubContextRootEnabled extends FeatureSwitchName {
-  override val name: String = "enable-new-hub-context-root"
+  override val name: String = "new-hub-context-root"
   override val toString: String = "New Hub Context-root Enabled"
 }
 
