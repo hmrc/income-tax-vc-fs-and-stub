@@ -5,6 +5,9 @@
 ### IF #1523 route
 GET         /income-tax/view/calculations/liability/$nino<[A-Z0-9]{9}>/:calcId                                                  uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.getCalcLegacy(nino: String, calcId: String)
 
+### override of calculation-list ###
+GET         /income-tax-view-change/calculation-list/:nino/$taxYearRange<[0-9]{2}-[0-9]{2}>/overwrite/:crystallisationStatus    uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.overwriteCalculationList(nino:String, taxYearRange: String, crystallisationStatus: String)
+
 ### HIP #5624 ###
 GET         /itsa/income-tax/v1/$taxYearRange<[0-9]{2}-[0-9]{2}>/view/calculations/liability/:nino                              uk.gov.hmrc.incometaxvcfsandstub.controllers.CalculationController.generateHipCalculationListTYS(nino:String, taxYearRange: String)
 ### IF #2083 - v11.0.3 ###
