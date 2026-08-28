@@ -109,6 +109,10 @@ Causes the Claim to Adjust POA submission journey to publish submission evidence
 
 Enables the Triggered Migration journey, requiring eligible users to migrate to MTD as part of their View and Change flow.
 
+#### New Hub Context Root Enabled
+
+Enables the hub url so it start with /manage-self-assessment instead of /report-quarterly/income-and-expenses/view
+
 #### Read From Mongo
 Controls whether stubbed API responses are served from MongoDB-backed data rather than static default responses.
 
