@@ -18,10 +18,12 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import io.circe.*
 import org.apache.pekko.actor.ActorSystem
+import org.mongodb.scala.bson.BsonString
 import org.mongodb.scala.model.Filters.*
 import play.api.libs.json.JsValue
 import play.api.mvc.*
 import play.api.{Configuration, Logging}
+import uk.gov.hmrc.incometaxvcfsandstub.models.FinancialDetailsModel
 import uk.gov.hmrc.incometaxvcfsandstub.models.HttpMethod.*
 import uk.gov.hmrc.incometaxvcfsandstub.repositories.{DataRepository, DefaultValues}
 import uk.gov.hmrc.incometaxvcfsandstub.utils.{AddDelays, FinancialDetailsUtils}
@@ -258,4 +260,36 @@ class FinancialDetailsRequestController @Inject() (
     })
     mongoResponses
   }
+
+  def overwriteFinancialsData(nino: String): Action[AnyContent] =
+    Action.async { implicit request =>
+      request.body.asJson match {
+        case None => Future.successful(BadRequest("No JSON found - Expected JSON data"))
+        case Some(json) =>
+          json.validate[FinancialDetailsModel].fold(
+            invalid = _ => Future.successful(BadRequest("Invalid JSON data")),
+            valid = userModel => {
+              val id = s"/etmp/RESTAdapter/itsa/taxpayer/financial-details?calculateAccruedInterest=true&customerPaymentInformation=true&dateFrom=2026-04-06&dateTo=2027-04-05&idNumber=$nino&idType=NINO&includeLocks=true&includeStatistical=false&onlyOpenItems=false&regimeType=ITSA&removePaymentonAccount=false"
+
+              for {
+                financialsUpdate <- dataRepository.updateArrayItemFieldByIdentifier(
+                  id,
+                  "response.success.documentDetails",
+                  "documentID",
+                  BsonString("888881202203"),
+                  "chargeClassification",
+                  BsonString(userModel.chargeClassification))
+              } yield {
+                if (financialsUpdate.wasAcknowledged()) {
+                  logger.info("Successfully updated financial details")
+                  Ok("Success")
+                } else {
+                  logger.warn("Failed to update financial details")
+                  InternalServerError("Failed to update financial details")
+                }
+              }
+            }
+          )
+      }
+    }
 }

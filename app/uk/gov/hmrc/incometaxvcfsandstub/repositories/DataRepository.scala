@@ -18,14 +18,14 @@ package uk.gov.hmrc.incometaxvcfsandstub.repositories
 
 import controllers.Execution.trampoline
 import uk.gov.hmrc.incometaxvcfsandstub.models.DataModel
-import uk.gov.hmrc.mongo.logging.ObservableFutureImplicits._
+import uk.gov.hmrc.mongo.logging.ObservableFutureImplicits.*
 import org.mongodb.scala.Document
-import org.mongodb.scala.bson.BsonDocument
+import org.mongodb.scala.bson.{BsonDocument, BsonValue}
 import org.mongodb.scala.bson.conversions.Bson
-import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.model.Filters.*
 import org.mongodb.scala.model.{Filters, ReplaceOptions, UpdateOptions, Updates}
 import org.mongodb.scala.result.{DeleteResult, UpdateResult}
-
+import scala.jdk.CollectionConverters.*
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
@@ -82,4 +82,25 @@ class DataRepository @Inject() (repository: DataRepositoryBase) {
       .updateOne(filter, update, UpdateOptions().upsert(true))
       .toFuture()
   }
+
+  def updateArrayItemFieldByIdentifier(
+                                        url: String,
+                                        arrayPath: String, // e.g. "response.success.documentDetails"
+                                        identifierField: String, // e.g. "documentId"
+                                        identifierValue: BsonValue, // e.g. BsonString("888881202203")
+                                        targetField: String, // e.g. "chargeClassification"
+                                        newValue: BsonValue
+                                      ): Future[UpdateResult] = {
+    val filter = Filters.equal("_id", url)
+    val alias = "item"
+
+    val updatePath = s"$arrayPath.$$[$alias].$targetField"
+    val update = Updates.set(updatePath, newValue)
+
+    val arrayFilter = BsonDocument(s"$alias.$identifierField" -> identifierValue)
+    val options = new UpdateOptions().arrayFilters(List(arrayFilter).asJava)
+
+    repository.collection.updateOne(filter, update, options).toFuture()
+  }
+  
 }
