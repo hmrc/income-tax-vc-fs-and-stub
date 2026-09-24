@@ -50,6 +50,7 @@ class SetupDataController @Inject() (
             case true =>
               schemaValidation.validateResponseJson(json.schemaId, json.response) flatMap {
                 case true if json.schemaId == "getDesObligations" => addStubDataToDB(json)
+                case true if json.schemaId == "getHipObligations" => addStubDataToDB(json)
                 case true | `ignoreJsonValidation` =>
                   val modifiedJson = PopulateYear(Json.toJson(json)).as[DataModel]
                   addStubDataToDB(modifiedJson)

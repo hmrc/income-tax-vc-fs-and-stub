@@ -17,6 +17,7 @@
 package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import org.apache.pekko.actor.ActorSystem
+import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Logging}
 import uk.gov.hmrc.incometaxvcfsandstub.models.DataModel
@@ -37,17 +38,24 @@ class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
     extends FrontendController(cc) with Logging with AddDelays {
 
   private final val obligationsSchemaId = "getDesObligations"
+  private final val hipObligationsSchemaId = "getHipObligations"
 
   private def prefixObligationsUrl(nino: String): String = {
     s"/enterprise/obligation-data/nino/$nino/ITSA?status=F"
+  }
+
+  private def prefixHipObligationsUrl(nino: String): String = {
+    s"/etmp/RESTAdapter/obligation-data/nino/$nino/ITSA?status=F"
   }
 
   def overwriteObligationsData(nino: String): Action[AnyContent] =
     Action.async { implicit request =>
       val currentDate = LocalDate.now()
       val createdUrl = s"${prefixObligationsUrl(nino)}&from=${currentDate.minusDays(90)}&to=$currentDate"
-      
+      val createdHipUrl = s"${prefixHipObligationsUrl(nino)}&from=${currentDate.minusDays(90)}&to=$currentDate"
+
       val obligationsData = ObligationsDataUtils.createFulfilledObligationsData()
+      val hipObligationsData: JsValue = Json.obj("success" -> obligationsData)
 
       val newObligationsData = DataModel(
         _id = createdUrl,
@@ -57,11 +65,21 @@ class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
         response = Some(obligationsData)
       )
 
+      val newHipObligationsData = DataModel(
+        _id = createdHipUrl,
+        schemaId = hipObligationsSchemaId,
+        method = "GET",
+        status = 200,
+        response = Some(hipObligationsData)
+      )
+
       for {
         _ <- dataRepository.removeByIdPrefix(prefixObligationsUrl(nino))
+        _ <- dataRepository.removeByIdPrefix(prefixHipObligationsUrl(nino))
         obligationsUpdate <- dataRepository.addEntry(newObligationsData)
+        hipObligationsUpdate <- dataRepository.addEntry(newHipObligationsData)
       } yield {
-        if (obligationsUpdate.wasAcknowledged()) {
+        if (obligationsUpdate.wasAcknowledged() && hipObligationsUpdate.wasAcknowledged()) {
           logger.info("Successfully updated obligation details")
           Ok("Success")
         } else {
