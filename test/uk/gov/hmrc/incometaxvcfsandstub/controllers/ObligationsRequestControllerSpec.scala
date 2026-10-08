@@ -18,7 +18,7 @@ package uk.gov.hmrc.incometaxvcfsandstub.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
+import play.api.http.Status.OK
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.incometaxvcfsandstub.controllers.helpers.DataHelper
