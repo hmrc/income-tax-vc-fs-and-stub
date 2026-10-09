@@ -41,7 +41,7 @@ class CalculationUtilsSpec extends TestSupport {
     }
 
     "be always single element" in {
-      List("AA888888A", "AY888881A", "AY999991A", "XXYYTTEEA").foreach { nino =>
+      List("AA888888A", "AY888881A", "CA000000A", "XXYYTTEEA").foreach { nino =>
         val calcResponse = createCalResponseModel(nino, Some(taxYear), true).toOption
         calcResponse.get.size shouldBe 1
       }
@@ -81,7 +81,7 @@ class CalculationUtilsSpec extends TestSupport {
     }
 
     "be always single element" in {
-      List("AA888888A", "AY888881A", "AY999991A", "XXYYTTEEA").foreach { nino =>
+      List("AA888888A", "AY888881A", "CA000000A", "XXYYTTEEA").foreach { nino =>
         val calcResponse = createCalSummaryModel(nino, taxYear, true).toOption
         calcResponse.get.size shouldBe 1
       }
