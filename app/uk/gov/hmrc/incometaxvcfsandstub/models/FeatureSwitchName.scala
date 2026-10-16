@@ -41,8 +41,6 @@ object FeatureSwitchName {
       JsSuccess(ITSASubmissionIntegration)
     case JsString(ChargeHistory.name) =>
       JsSuccess(ChargeHistory)
-    case JsString(BusinessDetailsFrontend.name) =>
-      JsSuccess(BusinessDetailsFrontend)
     case JsString(CreditsRefundsRepay.name) =>
       JsSuccess(CreditsRefundsRepay)
     case JsString(PaymentHistoryRefunds.name) =>
@@ -118,7 +116,6 @@ object FeatureSwitchName {
       RecentActivity,
       ITSASubmissionIntegration,
       ChargeHistory,
-      BusinessDetailsFrontend,
       CreditsRefundsRepay,
       PaymentHistoryRefunds,
       OptOutFs,
@@ -164,12 +161,6 @@ case object ChargeHistory extends FeatureSwitchName {
   override val name: String = "charge-history"
 
   override def toString: String = "Charge History"
-}
-
-case object BusinessDetailsFrontend extends FeatureSwitchName {
-  override val name: String = "business-details-frontend"
-
-  override def toString: String = "Business Details Frontend"
 }
 
 case object CreditsRefundsRepay extends FeatureSwitchName {
