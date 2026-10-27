@@ -77,8 +77,6 @@ object FeatureSwitchName {
       JsSuccess(NoIncomeSourcesRedirect)
     case JsString(FinancialsFrontend.name) =>
       JsSuccess(FinancialsFrontend)
-    case JsString(ReturnsFrontend.name) =>
-      JsSuccess(ReturnsFrontend)
     case JsString(RevenueAmendments.name) =>
       JsSuccess(RevenueAmendments)
     case JsString(NewHubContextRootEnabled.name) =>
@@ -133,7 +131,6 @@ object FeatureSwitchName {
       IdempotencyKeyForCreateIncomeSource,
       NoIncomeSourcesRedirect,
       FinancialsFrontend,
-      ReturnsFrontend,
       RevenueAmendments,
       NewHubContextRootEnabled,
       HideBusinessName,
@@ -253,11 +250,6 @@ case object NoIncomeSourcesRedirect extends FeatureSwitchName {
 case object FinancialsFrontend extends FeatureSwitchName {
   override val name: String = "financials-frontend"
   override val toString: String = "Financials Frontend"
-}
-
-case object ReturnsFrontend extends FeatureSwitchName {
-  override val name: String = "returns-frontend"
-  override val toString: String = "Returns Frontend"
 }
 
 case object RevenueAmendments extends FeatureSwitchName {
