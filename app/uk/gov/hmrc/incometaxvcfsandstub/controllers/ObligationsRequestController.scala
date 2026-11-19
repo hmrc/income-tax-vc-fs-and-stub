@@ -51,8 +51,8 @@ class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
   def overwriteObligationsData(nino: String): Action[AnyContent] =
     Action.async { implicit request =>
       val currentDate = LocalDate.now()
-      val createdUrl = s"${prefixObligationsUrl(nino)}&from=${currentDate.minusDays(90)}&to=$currentDate"
-      val createdHipUrl = s"${prefixHipObligationsUrl(nino)}&from=${currentDate.minusDays(90)}&to=$currentDate"
+      val createdUrl = s"${prefixObligationsUrl(nino)}&dateFrom=${currentDate.minusDays(90)}&dateTo=$currentDate"
+      val createdHipUrl = s"${prefixHipObligationsUrl(nino)}&dateFrom=${currentDate.minusDays(90)}&dateTo=$currentDate"
 
       val obligationsData = ObligationsDataUtils.createFulfilledObligationsData()
       val hipObligationsData: JsValue = Json.obj("success" -> obligationsData)
