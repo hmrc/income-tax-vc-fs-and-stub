@@ -45,7 +45,7 @@ class ObligationsRequestController @Inject()(cc: MessagesControllerComponents,
   }
 
   private def prefixHipObligationsUrl(nino: String): String = {
-    s"/etmp/RESTAdapter/obligation-data/nino/$nino/ITSA?status=F"
+    s"/etmp/RESTAdapter/obligation-data/NINO/$nino/ITSA?status=F"
   }
 
   def overwriteObligationsData(nino: String): Action[AnyContent] =
